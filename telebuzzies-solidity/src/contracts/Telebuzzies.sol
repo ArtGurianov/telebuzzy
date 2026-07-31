@@ -19,7 +19,12 @@ contract Telebuzzies is ITelebuzziesArgs, MyDaogsAbstractProject {
         uint256 subscriptionEndTimestamp;
     }
 
-    event SubscriptionUpdated(bytes32 indexed userIdHash, SubscriptionPlan plan, uint256 subscriptionEndTimestamp);
+    event SubscriptionUpdated(
+        bytes32 indexed userIdHash,
+        SubscriptionPlan plan,
+        uint256 subscriptionStartTimestamp,
+        uint256 subscriptionEndTimestamp
+    );
     event MonthlyPriceChanged(uint256 previousPrice, uint256 newPrice);
     event AnnualPriceChanged(uint256 previousPrice, uint256 newPrice);
 
@@ -61,7 +66,12 @@ contract Telebuzzies is ITelebuzziesArgs, MyDaogsAbstractProject {
             });
         }
 
-        emit SubscriptionUpdated(userIdHash, plan, subscriptions[userIdHash].subscriptionEndTimestamp);
+        emit SubscriptionUpdated(
+            userIdHash,
+            plan,
+            subscriptions[userIdHash].subscriptionStartTimestamp,
+            subscriptions[userIdHash].subscriptionEndTimestamp
+        );
     }
 
     function changeMonthlyPrice(uint256 _newPrice) external onlyProjectAdmin {

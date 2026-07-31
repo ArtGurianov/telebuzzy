@@ -17,14 +17,14 @@
 | `docs-rules.md` | `@mydaogs/shared-docs` → `rules/docs-rules.md` |
 | `external-docs-rules.md` | `@mydaogs/shared-docs` → `rules/external-docs-rules.md` |
 | `forms-rules.md` | `@mydaogs/shared-docs` → `rules/forms-rules.md` |
-| `i18n-string-rules.md` | `@mydaogs/shared-docs` → `rules/i18n-string-rules.md` |
 | `loading-state-rules.md` | `@mydaogs/shared-docs` → `rules/loading-state-rules.md` |
 | `pagination-rules.md` | `@mydaogs/shared-docs` → `rules/pagination-rules.md` |
 | `prisma-mongodb-rules.md` | `@mydaogs/shared-docs` → `rules/prisma-mongodb-rules.md` |
-| `tabs-query-param-rules.md` | `@mydaogs/shared-docs` → `rules/tabs-query-param-rules.md` |
 | `testing-rules.md` | `@mydaogs/shared-docs` → `rules/testing-rules.md` |
 
 An entry in the list below marked `→ @mydaogs/<package>` is not in this folder at all: it ships with that package and is read at its root
+
+`i18n-string-rules.md` (next-intl) and `tabs-query-param-rules.md` (a URL-synced tab-section registry) were deleted: this project ships no i18n library and has no tab-section UI
 
 ## Rules for adding a new General Rule
 
@@ -47,13 +47,11 @@ An entry in the list below marked `→ @mydaogs/<package>` is not in this folder
 4. `code-organization-rules.md` - Rules for where new code should live and how to export it
 5. `dev-workflow-rules.md` - Rules for running dev, build, lint, format, and DB tasks
 6. `loading-state-rules.md` - Rules requiring shared loading primitives instead of ad-hoc loaders
-7. `i18n-string-rules.md` - Rules requiring `next-intl` keys for all user-facing UI text
-8. `auth-permission-rules.md` - Rules for checking permissions in server actions and API route handlers
-9. `forms-rules.md` - Rules for implementing consistent forms with `react-hook-form`, Zod schemas, shared form UI, and server actions
-10. `pagination-rules.md` - Rules for cursor pagination, lazy infinite scrolling, and approved exceptions
-11. `admin-actions-rules.md` - Rules requiring wallet-signature submission and onchain role verification for all admin actions
-12. `prisma-mongodb-rules.md` - Rules for avoiding null-vs-missing filter pitfalls and intra-handler retry loops when using Prisma with MongoDB
-13. `bigint-serialization-rules.md` → `@mydaogs/core` - Rules for serializing and consuming `bigint` values across JSON boundaries
-14. `tabs-query-param-rules.md` - Rules for URL-synced tab state
-15. `contract-lifecycle-rules.md` - Rules coupling contract deploys/upgrades with database prunes, webhook regeneration, and the indexer cold-start floor
-16. `dev-phase-state-rules.md` - Rules forbidding old-vs-current documentation and requiring a version bump instead of a migration while data is disposable
+7. `auth-permission-rules.md` - Rules for checking permissions in server actions and API route handlers
+8. `forms-rules.md` - Rules for implementing consistent forms with `react-hook-form`, Zod schemas, shared form UI, and server actions
+9. `pagination-rules.md` - Rules for cursor pagination, lazy infinite scrolling, and approved exceptions
+10. `admin-actions-rules.md` - Rules requiring wallet-signature submission and onchain role verification for all admin actions
+11. `prisma-mongodb-rules.md` - Rules for avoiding null-vs-missing filter pitfalls and intra-handler retry loops when using Prisma with MongoDB
+12. `bigint-serialization-rules.md` → `@mydaogs/core` - Rules for serializing and consuming `bigint` values across JSON boundaries
+13. `contract-lifecycle-rules.md` - Rules coupling contract deploys/upgrades with database prunes, webhook regeneration, and the indexer cold-start floor
+14. `dev-phase-state-rules.md` - Rules forbidding old-vs-current documentation and requiring a version bump instead of a migration while data is disposable

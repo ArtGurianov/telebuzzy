@@ -11,10 +11,11 @@
 | `components.md` | `@mydaogs/shared-docs` → `units/components.md` |
 | `hooks.md` | `@mydaogs/shared-docs` → `units/hooks.md` |
 | `types.md` | `@mydaogs/shared-docs` → `units/types.md` |
-| `useMarkReadOnView.md` | `@mydaogs/shared-docs` → `units/useMarkReadOnView.md` |
 | `utils.md` | `@mydaogs/shared-docs` → `units/utils.md` |
 
 An entry in the list below marked `→ @mydaogs/<package>` is not in this folder at all: it ships with that package and is read at its root
+
+`useMarkReadOnView.md` was deleted: it documents a viewport-driven chat/notification read-marking hook this project does not have
 
 ## General purpose
 
@@ -26,8 +27,7 @@ Use these docs as an index to discover what already exists before creating new c
 
 Units can be placed in several locations and moved depending on reusability of a unit:
 
-- Reusable across apps in the monorepo are placed in the monorepo ui package
-- Reusable within an app are placed in the app's high-level shared folder
+- Reusable across the app are placed in the app's high-level shared folder
 - Non-reusable are placed close to where they are being used
 
 Exact locations are described in each unit doc markdown file. Placement rules are defined in `rules/code-organization-rules.md`
@@ -44,24 +44,6 @@ Exact locations are described in each unit doc markdown file. Placement rules ar
 - `./hooks.md` - React Hooks
 - `./utils.md` - Utility Functions
 - `./types.md` - TypeScript Types
-
-## Dedicated unit docs
-
-Complex units get their own file rather than a one-line inventory entry. Carried in this kit:
-
-- `./useMarkReadOnView.md` — IntersectionObserver hook that marks items read on viewport entry with debounced, chunked, retried flushing
-
-## Shared packages
-
-Keep a running list of shared packages and what each owns, so consumers know where to look before adding a dependency:
-
-- `@shared/ui` — cross-app components, hooks, types, and the semantic token contract
-- `@shared/utils` — pure locale, URL, route, and type helpers with no React/UI dependency
-- `@shared/backend-contract` — backend health contract, wire types, error catalog, and version constants
-- `@shared/cache-tags` — canonical cache tag constants shared by producers and consumers
-- `@shared/cache-handler` — distributed cache handler plus explicit cross-app invalidation publisher
-- `@shared/kv` — shared Redis client with native `.mjs` runtime files
-- `@shared/web3-events` — onchain event names and signatures shared by indexer, ABI decode, and webhook filters
 
 ## How the inventories work
 

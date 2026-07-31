@@ -12,13 +12,10 @@
 ## Recommended reading order
 
 1. [`product/README.md`](product/README.md)
-2. [`decisions/tech-stack.md`](decisions/tech-stack.md)
-3. [`decisions/monorepo.md`](decisions/monorepo.md)
-4. [`decisions/backend.md`](decisions/backend.md)
-5. [`decisions/frontend.md`](decisions/frontend.md)
-6. [`decisions/data-flow.md`](decisions/data-flow.md)
-7. [`rules/README.md`](rules/README.md)
-8. [`units/README.md`](units/README.md)
+2. [`decisions/blockchain.md`](decisions/blockchain.md)
+3. [`decisions/solidity-upgradeability.md`](decisions/solidity-upgradeability.md)
+4. [`rules/README.md`](rules/README.md)
+5. [`units/README.md`](units/README.md)
 
 ## Reusable code pieces
 

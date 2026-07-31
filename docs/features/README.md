@@ -8,29 +8,12 @@
 
 | Local | Upstream file |
 | --- | --- |
-| `ARCH-cron-auth-middleware.md` | `@mydaogs/shared-docs` → `features/ARCH-cron-auth-middleware.md` |
-| `ARCH-dangerous-dialogs.md` | `@mydaogs/shared-docs` → `features/ARCH-dangerous-dialogs.md` |
-| `ARCH-data-layer-modules.md` | `@mydaogs/shared-docs` → `features/ARCH-data-layer-modules.md` |
-| `ARCH-loading-state-primitives.md` | `@mydaogs/shared-docs` → `features/ARCH-loading-state-primitives.md` |
-| `ARCH-query-error-boundary.md` | `@mydaogs/shared-docs` → `features/ARCH-query-error-boundary.md` |
-| `ARCH-react-cache-pattern.md` | `@mydaogs/shared-docs` → `features/ARCH-react-cache-pattern.md` |
 | `ARCH-react-hook-form-integration.md` | `@mydaogs/shared-docs` → `features/ARCH-react-hook-form-integration.md` |
-| `ARCH-route-groups.md` | `@mydaogs/shared-docs` → `features/ARCH-route-groups.md` |
-| `ARCH-semantic-css-tokens.md` | `@mydaogs/shared-docs` → `features/ARCH-semantic-css-tokens.md` |
-| `ARCH-server-actions-pattern.md` | `@mydaogs/shared-docs` → `features/ARCH-server-actions-pattern.md` |
-| `ARCH-string-shorteners.md` | `@mydaogs/shared-docs` → `features/ARCH-string-shorteners.md` |
-| `ARCH-tabs-query-sync.md` | `@mydaogs/shared-docs` → `features/ARCH-tabs-query-sync.md` |
-| `ARCH-tanstack-query-integration.md` | `@mydaogs/shared-docs` → `features/ARCH-tanstack-query-integration.md` |
-| `ARCH-toast-lifecycle.md` | `@mydaogs/shared-docs` → `features/ARCH-toast-lifecycle.md` |
-| `ARCH-url-query-state.md` | `@mydaogs/shared-docs` → `features/ARCH-url-query-state.md` |
-| `ARCH-url-toasts.md` | `@mydaogs/shared-docs` → `features/ARCH-url-toasts.md` |
-| `ARCH-wagmi-integration.md` | `@mydaogs/shared-docs` → `features/ARCH-wagmi-integration.md` |
-| `ARCH-web3-buttons.md` | `@mydaogs/shared-docs` → `features/ARCH-web3-buttons.md` |
-| `ARCH-webhook-signature-verification.md` | `@mydaogs/shared-docs` → `features/ARCH-webhook-signature-verification.md` |
-| `ARCH-widgets-architecture.md` | `@mydaogs/shared-docs` → `features/ARCH-widgets-architecture.md` |
 | `ARCH-zod-schema-validation.md` | `@mydaogs/shared-docs` → `features/ARCH-zod-schema-validation.md` |
 
 An entry in the list below marked `→ @mydaogs/<package>` is not in this folder at all: it ships with that package and is read at its root
+
+The other 19 upstream `ARCH-*` docs this kit ships (cron auth middleware, dangerous-action dialogs, a `src/data` layer, shared loading primitives, a query error boundary, the `"use cache"` pattern, `_widgets` folders, route groups, semantic CSS tokens, server actions with a backend contract, string shorteners, URL-synced tabs, TanStack Query with a backend cache handler, toast lifecycle, URL query state, URL toasts, Reown AppKit wagmi integration, organization-aware web3 buttons, HMAC webhook verification) describe a different product's architecture — this app has no cron, no `apps/backend`, no `@mydaogs/ui` package, no tabs, and its wagmi connector and webhook auth work differently. Deleted rather than kept as placeholders, per the kit's own adoption steps
 
 - This folder contains docs for general summarized architectural features
 - Each feature summary has its own markdown file with a kebab-case name
@@ -50,54 +33,26 @@ The list below covers every blueprint the kit carries, including the ones that s
 
 ## Features list (file name + one sentence short description)
 
-### Web3 (7)
+### Web3 (2)
 
-1. `ARCH-wagmi-integration.md` - Wallet connectivity with wagmi + Reown AppKit, SSR-safe and env-driven
-2. `ARCH-network-config.md` → `@mydaogs/web3` - Centralized chain selection driven by env config
-3. `ARCH-env-config-split.md` → `@mydaogs/web3` - Client/server environment variable separation with Zod validation
-4. `ARCH-contract-write-wrapper.md` → `@mydaogs/web3-client` - `useAppWriteContract` wrapping wagmi with toast lifecycle, reconciliation, and query invalidation
-5. `ARCH-durable-pending-tx-sync.md` → `@mydaogs/web3-tx` - Durable pending transaction registry with reconciliation, toast recovery, and cross-tab action blocking
-6. `ARCH-pending-transactions.md` → `@mydaogs/web3-tx` - Persisting blockchain transaction tracking across refreshes
-7. `ARCH-web3-buttons.md` - Forcing wallet connection and registered-address checks before onchain operations
+1. `ARCH-network-config.md` → `@mydaogs/web3` - Centralized chain selection driven by env config
+2. `ARCH-env-config-split.md` → `@mydaogs/web3` - Client/server environment variable separation with Zod validation
 
 ### Indexing (1)
 
-8. `ARCH-event-processing-pipeline.md` → `@mydaogs/indexer` - Event processor with atomic deduplication, retries, ordering guards, and a terminal-failure taxonomy
+3. `ARCH-event-processing-pipeline.md` → `@mydaogs/indexer` - Event processor with atomic deduplication, retries, ordering guards, and a terminal-failure taxonomy
 
-### Data Fetching & Caching (5)
+### Data Fetching & Caching (1)
 
-9. `ARCH-react-cache-pattern.md` - Server-side caching layers: React `cache()` and `"use cache"` with tags
-10. `ARCH-data-layer-modules.md` - Organized server-only data modules under `src/data` with domain folders
-11. `ARCH-tanstack-query-integration.md` - Client-side query management with TanStack Query and gated persistence
-12. `ARCH-query-invalidation-pattern.md` → `@mydaogs/web3-client` - Automatic query invalidation on blockchain transactions
-13. `ARCH-query-error-boundary.md` - TanStack Query error boundary with reset and auth redirect
+4. `ARCH-query-invalidation-pattern.md` → `@mydaogs/web3-client` - Automatic query invalidation on blockchain transactions
 
-### API & Server Actions (6)
+### API & Server Actions (3)
 
-14. `ARCH-backend-api-contract.md` → `@mydaogs/contract` - Versioned backend route contract and transport rules
-15. `ARCH-api-response-wrapper.md` → `@mydaogs/contract` - Standardized response creation utilities for routes and actions
-16. `ARCH-app-business-error.md` → `@mydaogs/contract` - Custom error class with status codes and localized code resolution
-17. `ARCH-server-actions-pattern.md` - Server actions with authentication, permissions, and cache invalidation
-18. `ARCH-cron-auth-middleware.md` - Constant-time comparison authentication for cron endpoints
-19. `ARCH-webhook-signature-verification.md` - HMAC SHA256 signature validation for webhooks
+5. `ARCH-backend-api-contract.md` → `@mydaogs/contract` - Versioned backend route contract and transport rules
+6. `ARCH-api-response-wrapper.md` → `@mydaogs/contract` - Standardized response creation utilities for routes and actions
+7. `ARCH-app-business-error.md` → `@mydaogs/contract` - Custom error class with status codes and localized code resolution
 
 ### Forms & Validation (2)
 
-20. `ARCH-zod-schema-validation.md` - Zod schemas for all forms and request payloads
-21. `ARCH-react-hook-form-integration.md` - Form handling with react-hook-form and zodResolver
-
-### State & URL (3)
-
-22. `ARCH-url-query-state.md` - URL-based state management hooks for shareable application state
-23. `ARCH-tabs-query-sync.md` - Deep-linkable tab state via a registered section registry
-24. `ARCH-url-toasts.md` - One-time toast messages invoked via URL query params
-
-### UI Patterns (7)
-
-25. `ARCH-widgets-architecture.md` - `_widgets` folder pattern for organizing page-specific components
-26. `ARCH-route-groups.md` - Route groups for layout organization without affecting URL structure
-27. `ARCH-loading-state-primitives.md` - Shared loading-state primitives across app UI
-28. `ARCH-toast-lifecycle.md` - Shared toast wrapper lifecycle controls
-29. `ARCH-dangerous-dialogs.md` - Extra protection layer for confirming destructive actions
-30. `ARCH-string-shorteners.md` - Displaying long strings like transaction hashes in readable format
-31. `ARCH-semantic-css-tokens.md` - Semantic CSS token contract for cross-app theming
+8. `ARCH-zod-schema-validation.md` - Zod schemas for all forms and request payloads
+9. `ARCH-react-hook-form-integration.md` - Form handling with react-hook-form and zodResolver
