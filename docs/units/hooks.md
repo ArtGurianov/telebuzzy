@@ -2,20 +2,15 @@
 
 ## Locations
 
-- `<monorepo>/apps/*/src/app/**/_widgets/_hooks/` - non reusable and route scoped
-- `<monorepo>/apps/*/src/lib/hooks/` - reusable within an app and re-exported via `index.ts`
-- `<monorepo>/packages/ui/src/lib/hooks/` - reusable across apps and re-exported via `index.ts`
+- Colocated with the component that uses them - non reusable
+- `telebuzzies-frontend/src/lib/hooks/` - reusable within the app
 
 ## Units files lists (file path + one sentence short description)
 
 ### Non-Reusable
 
-<!-- route-scoped hooks under _widgets/_hooks/ -->
+<!-- route-scoped hooks colocated with usage -->
 
-### Reusable within an app
+### Reusable
 
-<!-- hooks under apps/<app>/src/lib/hooks/ -->
-
-### Reusable across apps
-
-<!-- hooks under packages/ui/src/lib/hooks/ -->
+<!-- hooks under telebuzzies-frontend/src/lib/hooks/ -->

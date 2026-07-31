@@ -6,14 +6,12 @@ Forms use react-hook-form with `zodResolver` for type-safe validation and shared
 
 ## Behavior
 
-- Schemas live in `lib/schemas`
-- Forms submit to server actions and show toast feedback
+- Schemas live in `src/lib/schemas`
+- Forms submit to server actions and show toast feedback (`sonner`)
 - Pending state is tracked with an explicit async lifecycle, not `useTransition` — a React transition's pending flag does not reliably track async request completion
-- Draft-oriented forms use `useDebouncedAutosave` with a projected partial schema when persistence should happen after idle input. It validates before saving, serializes requests, retries transient failures, and allows terminal actions to cancel their pending save
 
 ## Related files
 
-- `<monorepo>/packages/ui/src/components/form.tsx`
-- `<monorepo>/apps/app/src/lib/hooks/useDebouncedAutosave.ts`
-- `<monorepo>/apps/app/src/lib/schemas`
+- `telebuzzies-frontend/src/components/ui/form.tsx`
+- `telebuzzies-frontend/src/lib/schemas/`
 - `rules/forms-rules.md`

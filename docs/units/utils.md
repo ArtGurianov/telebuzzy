@@ -2,25 +2,23 @@
 
 ## Locations
 
-- `<monorepo>/apps/*/src/app/**/_widgets/_utils/` - non reusable and route scoped
-- `<monorepo>/apps/*/src/lib/utils/` - reusable within an app (shared) and re-exported via `index.ts`
-- `<monorepo>/apps/*/src/lib/schemas/` - reusable app-level schema and canonicalization helpers
-- `<monorepo>/apps/*/src/lib/utils/client.ts` - client-only barrel re-exports for utility helpers
-- `<monorepo>/apps/*/src/lib/utils/server.ts` - server-only barrel re-exports for utility helpers
-- `<monorepo>/apps/backend/src/lib/web3/indexer/` - server-only blockchain indexer handlers
-- `<monorepo>/packages/ui/src/lib/utils/` - reusable across apps and re-exported via `index.ts`
-- `<monorepo>/packages/utils/src/` - reusable pure helpers shared across apps and re-exported via `index.ts`
+- Colocated with the component/module that uses them - non reusable
+- `telebuzzies-frontend/src/lib/utils/` - reusable within the app, re-exported via `index.ts`
+- `telebuzzies-frontend/src/lib/schemas/` - Zod validation schemas
 
 ## Units files lists (file path + one sentence short description)
 
 ### Non-Reusable
 
-<!-- route-scoped utils under _widgets/_utils/ -->
+<!-- route-scoped or component-scoped utils colocated with usage -->
 
-### Reusable within an app
+### Reusable
 
-<!-- utils under apps/<app>/src/lib/utils/ -->
+`telebuzzies-frontend/src/lib/utils/index.ts` re-exports:
 
-### Reusable across apps
-
-<!-- utils under packages/ui/src/lib/utils/ and packages/utils/src/ -->
+- `cn` - Tailwind class-name merge helper
+- `AppClientError` - error thrown by the Telegram webhook handler to drive its reply-via-error control flow
+- `createActionResponse` - standardized server action response shape
+- `formatDataMessage` - formats notification HTML for the Telegram Bot API
+- `getAppChain` - maps `NEXT_PUBLIC_APP_ENV`/`NEXT_PUBLIC_NETWORK` to the active viem/wagmi chain
+- `stringToBytes32` - packs and pads/truncates a string (user id) into the `bytes32` key the contract stores subscriptions under

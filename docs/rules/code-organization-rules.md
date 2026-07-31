@@ -20,26 +20,19 @@ These rules define where new code should live so the codebase stays discoverable
 - Before creating a _unit_, check `units/README.md` and the relevant units page to see if something already exists
 - Prefer reusing or extending an existing _unit_ over creating a new one
 - If you create a new _unit_, start by placing it close to where it is used and promote it later if it becomes reusable
-- Non reusable units should be located close to their page in `<monorepo>/apps/*/src/app/**/_widgets/**` (typically in `{_components, _utils, _hooks, _types}` folder or nested deeper if needed)
-- Reusable within an app units should live under the app level shared folders and be re-exported via the relevant `index.ts` barrels
-- Reusable across apps units should live under `<monorepo>/packages/ui/` and be re-exported via the relevant `index.ts` barrels
+- Non-reusable units live colocated next to the route or component that uses them
+- Reusable units live under `telebuzzies-frontend/src/lib/{utils,hooks}/` or `telebuzzies-frontend/src/components/` and are re-exported via the relevant `index.ts` barrel, where one exists
 - After creating or moving a unit, update the relevant file under `units/` so units stay discoverable
 - Prefer `export const` rather than default exports
-- All newly created _reusable_ units must be re-exported from the relevant `index.ts`
-- Components with Next.js imports may live in a shared package only when that package declares Next.js as a peer dependency and the component behavior is reusable across apps; app-specific routing, configuration, and presentation remain in app-level wrappers
-- For dynamic route templates (for example `"/entity/[id]"`), build URLs with `buildDynamicRoutePath` from `@shared/ui/lib/utils` instead of manual string replacement
+- This repo has no shared package — `telebuzzies-frontend` and `telebuzzies-solidity` are two independent, non-workspace packages, so "reusable" here means reusable within the frontend app, not across packages
 
 ## Barrel locations
 
-- `<monorepo>/packages/ui/src/lib/['utils' | 'hooks' | 'types']/index.ts` - reusable *across apps* utilities, hooks, types
-- `<monorepo>/packages/ui/src/components/**/index.ts` - reusable UI components (re-exported per component folder)
-- `<monorepo>/apps/*/src/lib/['utils' | 'hooks' | 'types']/index.ts` - reusable *within an app* utilities, hooks, types
-- `<monorepo>/apps/*/src/components/**/index.ts` - reusable app components (re-exported per component folder)
-- `<monorepo>/apps/app/src/actions/index.ts` - reusable client-safe Next.js server actions
+- `telebuzzies-frontend/src/lib/utils/index.ts` - reusable utilities
+- `telebuzzies-frontend/src/lib/hooks/` - reusable hooks
+- `telebuzzies-frontend/src/components/**/index.ts` - reusable components (re-exported per component folder, where present)
 
 ## Examples
 
-- A type used only by `apps/app/src/app/(dashboard)/entity/[id]` should be colocated under that route's `_widgets/` (for example `_widgets/types.ts`)
-- A helper function used across multiple pages in `apps/app` should go into `apps/app/src/lib/utils/` and be re-exported from `apps/app/src/lib/utils/index.ts`
-- A component shared between two apps should go into `packages/ui/src/components` and be re-exported from `packages/ui/src/components/index.ts`
-- For `APP_ROUTES_CONFIG[APP_ROUTES.ENTITY_PROFILE].href`, use `buildDynamicRoutePath(..., { id })` rather than `.replace("[id]", id)`
+- A helper function used across multiple pages should go into `telebuzzies-frontend/src/lib/utils/` and be re-exported from `telebuzzies-frontend/src/lib/utils/index.ts`
+- A component used by only one route stays colocated with that route instead of moving to `src/components/`

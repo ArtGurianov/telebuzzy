@@ -1,7 +1,7 @@
 # Testing rules
 
-- Do not add tests for `<monorepo>/` (apps/packages). Validate changes with lint/build instead
-- Add and maintain tests for smart contracts in `<contracts>/` using Foundry (`forge test`)
+- Do not add tests for `telebuzzies-frontend/`. Validate changes with lint/build instead
+- Add and maintain tests for smart contracts in `telebuzzies-solidity/` using Foundry (`forge test`)
 
 ## Rationale
 

@@ -2,20 +2,15 @@
 
 ## Locations
 
-- `<monorepo>/apps/*/src/app/**/_widgets/**` - non reusable and route scoped
-- `<monorepo>/apps/*/src/components/` - reusable within an app and re-exported via `index.ts`
-- `<monorepo>/packages/ui/src/components/` - reusable across apps and re-exported via `index.ts`
+- Colocated with the route/component that uses them - non reusable
+- `telebuzzies-frontend/src/components/` - reusable within the app, re-exported via `index.ts` where a barrel exists
 
 ## Units files lists (file path + one sentence short description)
 
 ### Non-Reusable
 
-<!-- route-scoped components under _widgets/ -->
+<!-- route-scoped components colocated with usage -->
 
-### Reusable within an app
+### Reusable
 
-<!-- components under apps/<app>/src/components/ -->
-
-### Reusable across apps
-
-<!-- components under packages/ui/src/components/ -->
+<!-- components under telebuzzies-frontend/src/components/ -->

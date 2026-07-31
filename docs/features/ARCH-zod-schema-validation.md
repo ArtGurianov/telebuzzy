@@ -6,14 +6,11 @@ Zod schemas validate all forms and request payloads, providing typed parsing and
 
 ## Behavior
 
-- Schemas live under `<monorepo>/apps/app/src/lib/schemas`
-- Used with react-hook-form `zodResolver`
-- Cover shared primitives (email, address, wallet-request bodies) and per-feature form shapes
-- Schemas needing localized messages are **factory-based** so validation text can be injected from the calling form rather than hardcoded in the schema module
-- Numeric inputs that users type accept both dot and comma decimal separators and are parsed into an integer representation (for example basis points) before output
-- A conditional branch is preprocessed off when its explicit toggle is disabled, so a hidden sub-form cannot block submission
-- Numeric fields normalize valid values on blur to a fixed precision using the same separator convention, while invalid input stays visible so localized schema feedback can render
+- Schemas live under `telebuzzies-frontend/src/lib/schemas/`
+- Used with react-hook-form `zodResolver` for form input (`emailSchema`, `uuidSchema`) and with plain `.parse`/`.safeParse` for non-form data shapes: the `/api/notify` payload (`appDataSchema`), and on-chain read results decoded via viem (`feesTokenDetailsSchema`, `subscriptionDataSchema`)
+- `appDataSchema` uses `.catchall(z.string())` so callers can attach arbitrary string fields to a notification beyond the required `apiKey`/`title`; `ommitedKeySchema` is the same shape with `apiKey` stripped, for echoing the payload back without the credential
+- On-chain numeric reads (`feesTokenDetailsSchema.minClaimableUnitsAmount`, `subscriptionDataSchema.*Timestamp`) are typed `z.bigint()` to match viem's `uint256` decoding
 
 ## Related files
 
-- `<monorepo>/apps/app/src/lib/schemas/`
+- `telebuzzies-frontend/src/lib/schemas/`

@@ -8,7 +8,7 @@ These rules define where to run commands and what the supported workflows are fo
 
 - Any time you need to run dev, build, lint, or format commands
 - Any time you need to work with Prisma (generate or push)
-- Any time you need to run seeds or set up environment variables
+- Any time you need to set up environment variables
 
 ## When NOT to use
 
@@ -16,64 +16,50 @@ These rules define where to run commands and what the supported workflows are fo
 
 ## Rules
 
-- Run all pnpm/turbo tasks from `<monorepo>/` (the repository root is not itself a pnpm workspace when a separate contracts workspace sits beside it)
-- Use `pnpm` only (enforced via `npx only-allow pnpm`), Node version is defined in `<monorepo>/package.json`
-- Prefer running scripts via `pnpm <script>` (which wraps Turbo where needed)
-- Formatting
-  - `turbo format` / `turbo format:fix` runs per workspace package (apps and packages)
-  - `pnpm format:fix` runs the monorepo root formatter (useful for repo-level files too)
+- This repo is two independent packages, not a pnpm workspace: run frontend commands from `telebuzzies-frontend/` and Foundry commands from `telebuzzies-solidity/`. There is no root script that runs both
+- Use `pnpm` for the frontend package
+- `pnpm install` in `telebuzzies-frontend/` runs `postinstall` (`prisma generate` + webhook registration), which calls `getServerConfig()` — a complete, valid `.env` is required for install to finish, not just for running the dev server
 - Prisma client generation
-  - Rely on Turbo task dependencies in normal workflows
-  - Run `pnpm db:generate` only when `<monorepo>/packages/db/prisma/schema.prisma` changed or the Prisma client is clearly stale
+  - Run `pnpm db:generate` when `telebuzzies-frontend/prisma/schema.prisma` changes or the Prisma client is stale
 - Database schema push
-  - Use `pnpm db:push --filter=@shared/db` when you intentionally want to push schema changes to the database
-- Seeding
-  - Seed scripts live in `apps/backend/scripts/` and use the backend's Prisma client, auth schemas, and web3 helpers
-  - Run the prune seed only when `NODE_ENV=test`
-  - A seed that replays onchain transactions through backend routes needs the backend dev server reachable; the local onchain poller must be stopped first so it cannot race the seed
-  - Env-contract foot-gun: `NEXT_CACHE_NAMESPACE`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN` must match exactly between a writer app and every reader deployment it invalidates. Drift = silent no-op invalidations
-- Dev servers
-  - The default `pnpm dev` starts the web apps only; it intentionally does not start the local onchain poller so reseeding stays frictionless
-  - Run `pnpm dev:indexer` when you explicitly need the local onchain poller for runtime sync; stop it before any seed that replays transactions
-  - Run `pnpm dev:full` only when you want every dev service
-  - Apps that need HTTPS locally run `next dev --experimental-https`; binding a privileged port requires elevated privileges
-  - If you hit permissions issues with a privileged port, either run with `sudo` or change the port in that app's `package.json`
-  - If you hit permissions issues reading certificates, check the app's `certificates/` ownership and permissions
+  - `pnpm db:push` pushes schema changes to MongoDB (skips `generate`)
+  - `pnpm db:flush` force-resets the database — destructive, dev/test only
+- Telegram webhook
+  - `pnpm webhook:register` re-registers the bot webhook URL with the Telegram Bot API; runs automatically on `postinstall` too
+- Dev server
+  - `pnpm dev` starts Next.js on port 80 with `--experimental-https`; binding a privileged port requires elevated privileges
+  - If you hit permissions issues with the privileged port, either run with `sudo` or change the port in `telebuzzies-frontend/package.json`
+  - If you hit permissions issues reading certificates, check `telebuzzies-frontend/certificates/` ownership and permissions
 - Environment variables
-  - Full env var lists are in the relevant `.env.example` files
-  - Turbo enforces required env vars per-app in `<monorepo>/apps/*/turbo.json`
+  - Full env var lists are in each package's `.env.example`
+  - `telebuzzies-frontend/src/config/env.ts` validates client and server env vars via Zod at module scope, so an invalid `.env` fails at import time, not request time
 
 ## Troubleshooting
 
 - `EACCES` on a local certificate key
-  - Check file ownership and permissions under the app's `certificates/` directory
+  - Check file ownership and permissions under `telebuzzies-frontend/certificates/`
   - Either run the dev server with `sudo` or fix the file permissions locally so your user can read the key
 - Privileged port binding errors
-  - Either run the dev server with `sudo` or change the dev port to a non privileged port in the app's `package.json`
+  - Either run the dev server with `sudo` or change the dev port in `telebuzzies-frontend/package.json`
 
 ## Examples
 
 ```bash
-cd <monorepo>
+cd telebuzzies-frontend
 pnpm install
-```
-
-```bash
-cd <monorepo>
 pnpm dev
-pnpm dev --filter=app
-```
-
-```bash
-cd <monorepo>
-pnpm build --filter=app
+pnpm build
 pnpm lint
-pnpm check-types
-pnpm format:fix
 ```
 
 ```bash
-cd <monorepo>
+cd telebuzzies-frontend
 pnpm db:generate
-pnpm db:push --filter=@shared/db
+pnpm db:push
+```
+
+```bash
+cd telebuzzies-solidity
+forge build
+forge test
 ```

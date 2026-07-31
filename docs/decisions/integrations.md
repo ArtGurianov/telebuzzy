@@ -11,4 +11,19 @@ This decision has no upstream copy — it is required and project-specific
 
 ## Decision
 
-Not written yet
+- **Telegram Bot API** — the product's core delivery channel. `POST /api/notify` sends the formatted notification via `sendMessage`; the bot webhook (`POST /api/webhook/[token]`, authorized by the URL token matching `TG_BOT_TOKEN`) handles `/start` and `/set_api_key <uuid>`, which is the only way a `User.tgUserId` gets set. If Telegram is unavailable, `/api/notify`'s `sendMessage` call is awaited but its response is never checked for success — a Telegram-side failure still returns `200` to the caller — and the webhook's own reply-via-`AppClientError` send can itself fail silently (caught and turned into a 400, nothing further). There is no retry and no fallback delivery channel — this integration **is** the product
+- **Resend** (`AUTH_RESEND_KEY`) — sends Auth.js v5 magic-link emails and the billing notification emails (`SUBSCRIPTION_UPGRADED`, `SUBSCRIPTION_RESET_LITE/PRO`, `LIMIT_REACHED_LITE/PRO`, from `EMAIL_MESSAGE_TYPES`). Source of truth for whether those emails were *sent*; `User.limitReachedEmailSent` is the only persisted record of send state, and it is not reconciled against Resend's own delivery status. If Resend is unavailable, sign-in and billing emails silently fail to arrive — magic-link sign-in has no fallback, but `POST /api/notify` still completes and updates billing state either way, since the email send isn't on that request's critical path for the Telegram delivery itself
+- **MongoDB** (`DATABASE_URL`) — the offchain store of record for everything in `decisions/data-models.md`. No fallback; the app cannot serve authenticated routes or `/api/notify` without it
+- **Blockchain RPC** (viem, server-side) — reads subscription/pricing state live from the `Telebuzzies` contract on every `/api/notify` call and on the billing UI. Uses the chain's public RPC endpoint; there is no dedicated RPC provider API key in server env today, so there is no distinct RPC-provider outage mode to design around beyond "the public endpoint is unreachable or rate-limited," in which case reads fail and `/api/notify` throws
+
+## User data held by third parties
+
+- **Resend** holds the email address and message content for every magic-link and billing email sent through it
+- **Telegram** holds the bot conversation history (message text sent via `sendMessage`) on its own servers, outside this app's control
+- MongoDB is self/product-hosted, not a third party in this sense
+
+## Swap cost
+
+- **Resend** is the easiest to swap — it's called from a small number of send sites (`sendEmail` action, Auth.js provider config) behind no abstraction layer of its own, but the call sites are few enough that swapping providers is a contained change
+- **Telegram** is the hardest to swap — the entire product proposition ("send notifications to your personal Telegram") is Telegram-specific; replacing it is a product pivot, not an integration swap
+- **MongoDB** is a normal Prisma datasource swap (change `provider` + connection string), constrained only by which Prisma features the `@id @default(auto()) @db.ObjectId` fields rely on being Mongo-specific

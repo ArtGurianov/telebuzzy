@@ -20,13 +20,14 @@
 ## Reusable code pieces
 
 Some docs live next to their implementation rather than in this tree, so they
-move when the code moves. The barrels a new unit is exported from:
+move when the code moves. This repo is two independent packages, not a pnpm
+workspace — there is no shared package boundary, only within-app reuse. The
+barrels a new unit is exported from:
 
-- `<monorepo>/packages/ui/src/lib/['utils' | 'hooks' | 'types']/index.ts` - reusable *across apps* utilities, hooks, types
-- `<monorepo>/packages/ui/src/components/**/index.ts` - reusable UI components (re-exported per component folder)
-- `<monorepo>/apps/*/src/lib/['utils' | 'hooks' | 'types']/index.ts` - reusable *within an app* utilities, hooks, types
-- `<monorepo>/apps/*/src/components/**/index.ts` - reusable app components (re-exported per component folder)
-- `<monorepo>/apps/app/src/actions/index.ts` - client-safe server actions
+- `telebuzzies-frontend/src/lib/utils/index.ts` - reusable utilities
+- `telebuzzies-frontend/src/lib/hooks/` - reusable hooks
+- `telebuzzies-frontend/src/components/**/index.ts` - reusable components (re-exported per component folder, where present)
+- `telebuzzies-frontend/src/app/actions/*.ts` - server actions, imported directly by path (no barrel yet)
 
 ## Rules for creating new code pieces
 
