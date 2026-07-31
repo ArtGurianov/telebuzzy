@@ -27,12 +27,14 @@ export const telebuzziesContractAbi = [
     type: "function",
     name: "FEES_TOKEN_MONTHLY_PRICE",
     stateMutability: "view",
+    inputs: [],
     outputs: [{ type: "uint256" }],
   },
   {
     type: "function",
     name: "FEES_TOKEN_ANNUAL_PRICE",
     stateMutability: "view",
+    inputs: [],
     outputs: [{ type: "uint256" }],
   },
   {

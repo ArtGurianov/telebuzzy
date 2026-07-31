@@ -1,0 +1,12 @@
+{
+ "name": "telebuzzies",
+ "version": "0.0.0",
+ "private": true,
+ "devDependencies": {
+  "@mydaogs/shared-docs": "^0.8.1"
+ },
+ "scripts": {
+  "check:docs": "check-docs-adoption docs",
+  "check:docs-links": "check-docs-links docs"
+ }
+}

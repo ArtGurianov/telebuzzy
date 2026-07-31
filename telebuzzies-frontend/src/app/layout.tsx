@@ -9,7 +9,7 @@ import { UserProfileBtn } from "@/components/Buttons/UserProfileBtn";
 import { UserSvgUrl } from "@/components/svg";
 import { UpgradeBanner } from "@/components/UpgradeBanner/UpgradeBanner";
 import Image from "next/image";
-import getConfig from "next/config";
+import { wagmiConfig } from "@/config/web3/wagmiConfig";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/Footer/Footer";
@@ -51,7 +51,7 @@ export default async function RootLayout({
 }>) {
   const headersList = await headers();
   const cookieHeader = headersList.get("cookie");
-  const initialState = cookieToInitialState(getConfig(), cookieHeader);
+  const initialState = cookieToInitialState(wagmiConfig, cookieHeader);
 
   return (
     <html lang="en">

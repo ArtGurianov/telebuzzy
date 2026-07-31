@@ -22,7 +22,8 @@ const clientEnvSchema = z.object({
     .default("testnet"),
   NEXT_PUBLIC_CONTRACT_ADDRESS: z
     .string({
-      description: "Contract address for TELEBUZZIES solidity smart contract.",
+      description:
+        "UUPS proxy address for the TELEBUZZIES solidity smart contract (not the implementation address).",
     })
     .startsWith("0x"),
   NEXT_PUBLIC_MESSAGES_LIMIT_LITE: z.coerce.number({

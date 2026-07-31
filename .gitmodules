@@ -1,6 +1,12 @@
 [submodule "telebuzzies-solidity/lib/forge-std"]
 	path = telebuzzies-solidity/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-[submodule "telebuzzies-solidity/lib/openzeppelin-contracts"]
-	path = telebuzzies-solidity/lib/openzeppelin-contracts
-	url = https://github.com/Openzeppelin/openzeppelin-contracts
+[submodule "telebuzzies-solidity/lib/openzeppelin-contracts-upgradeable"]
+	path = telebuzzies-solidity/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+[submodule "telebuzzies-solidity/lib/openzeppelin-foundry-upgrades"]
+	path = telebuzzies-solidity/lib/openzeppelin-foundry-upgrades
+	url = https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades
+[submodule "telebuzzies-solidity/lib/mydaogs-ecosystem-contracts"]
+	path = telebuzzies-solidity/lib/mydaogs-ecosystem-contracts
+	url = https://github.com/mydaogs/mydaogs-ecosystem-contracts

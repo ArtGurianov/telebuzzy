@@ -58,7 +58,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   }, [isTxError, isReceiptError]);
 
   const sendTransaction = () => {
-    if (!!usdContractAddress && !!priceUsd && !!decimals) {
+    if (usdContractAddress != null && typeof priceUsd === "number" && typeof decimals === "number") {
       writeContract({
         abi: usdContractAbi,
         address: usdContractAddress,
@@ -75,7 +75,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
         isReceiptError ||
         isFetching ||
         !usdContractAddress ||
-        !decimals ||
+        typeof decimals !== "number" ||
         typeof priceUsd !== "number" ||
         typeof currentAllowanceUsd !== "number" ||
         currentAllowanceUsd >= priceUsd ||

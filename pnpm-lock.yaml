@@ -1,0 +1,23 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      '@mydaogs/shared-docs':
+        specifier: ^0.8.1
+        version: 0.8.1
+
+packages:
+
+  '@mydaogs/shared-docs@0.8.1':
+    resolution: {integrity: sha512-8xmtN9s8wMCno9GO1LX/T1U5gKq92pDbM34VnQL2MxmLM7+lDhiYz2S+LRyZixGd4cvFNye5GGY7+aFpVELgOw==}
+    hasBin: true
+
+snapshots:
+
+  '@mydaogs/shared-docs@0.8.1': {}
