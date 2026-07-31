@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Blead.io is a service that lets e-businesses send custom notifications to a user's personal Telegram. Monorepo with two packages:
+Telebuzzies is a service that lets e-businesses send custom notifications to a user's personal Telegram. Monorepo with two packages:
 
-- **bleadio-frontend/** — Next.js 15 (App Router) + React 19 web app
-- **bleadio-solidity/** — Foundry project with the `Blead.sol` smart contract
+- **telebuzzies-frontend/** — Next.js 15 (App Router) + React 19 web app
+- **telebuzzies-solidity/** — Foundry project with the `Telebuzzies.sol` smart contract
 
 ## Commands
 
-### Frontend (`bleadio-frontend/`)
+### Frontend (`telebuzzies-frontend/`)
 
 ```bash
 pnpm dev              # Dev server on port 80 with experimental HTTPS
@@ -27,13 +27,13 @@ Package manager is **pnpm**. `postinstall` runs `prisma generate` + webhook regi
 
 There is no frontend test suite; tests exist only in the Solidity package.
 
-### Solidity (`bleadio-solidity/`)
+### Solidity (`telebuzzies-solidity/`)
 
 ```bash
 forge build                    # Compile contracts
-forge test                     # Run tests (test/Blead.t.sol)
+forge test                     # Run tests (test/Telebuzzies.t.sol)
 forge test --match-test <name> -vvvv   # Run a single test, verbose
-forge script script/BleadDeployment.s.sol --rpc-url <RPC> --broadcast  # Deploy
+forge script script/TelebuzziesDeployment.s.sol --rpc-url <RPC> --broadcast  # Deploy
 ```
 
 Uses Foundry with `forge-std` and `openzeppelin-contracts` as git submodule dependencies. Remappings in `remappings.txt`. Deployment reads env vars: `ENV_MODE`, `DEPLOYER_PRIVATE_KEY`, `MONTHLY_PRICE_USD`, `ANNUAL_PRICE_USD`, and (production only) `USD_CONTRACT_ADDRESS`.
@@ -50,7 +50,7 @@ Uses Foundry with `forge-std` and `openzeppelin-contracts` as git submodule depe
 
 **Plans / billing:** Two plans. In code the constant is `BILLING_PLANS.LIGHT` / `BILLING_PLANS.PRO` (`src/lib/utils/contsants.ts`), but env vars and email types call the free plan "LITE" (`NEXT_PUBLIC_MESSAGES_LIMIT_LITE`, `LIMIT_REACHED_LITE`) — keep this inconsistency in mind when searching. There is no on-chain record for free users: `getUserBillingPlan` returns PRO iff the on-chain `subscriptionEndTimestamp` is in the future, otherwise LIGHT.
 
-**Subscription flow:** User connects MetaMask (headless connector via wagmi v2), approves ERC-20 spending, calls `Blead.updateSubscription(bytes32(userId), plan)`. Client reads subscription data via `SubscriptionProvider` context (wagmi `useReadContract`).
+**Subscription flow:** User connects MetaMask (headless connector via wagmi v2), approves ERC-20 spending, calls `Telebuzzies.updateSubscription(bytes32(userId), plan)`. Client reads subscription data via `SubscriptionProvider` context (wagmi `useReadContract`).
 
 **Billing period:** Rolling 30-day windows computed by `calculateBillingPeriodStartTimestamp` from the on-chain subscription start (falls back to `user.createdAt` for never-subscribed users). Enforced server-side in the notify endpoint and mirrored client-side.
 
@@ -64,11 +64,11 @@ Uses Foundry with `forge-std` and `openzeppelin-contracts` as git submodule depe
 
 ### Solidity
 
-**`Blead.sol`:** Ownable contract managing subscriptions keyed by `bytes32(userId)`. Charges a USD-denominated ERC-20 stablecoin via `transferFrom` to the owner (price is scaled by the token's `decimals()` at call time). Subscriptions extend if still active, otherwise start fresh. MONTHLY = 30 days, ANNUAL = 360 days. Owner can change the token address and prices.
+**`Telebuzzies.sol`:** Ownable contract managing subscriptions keyed by `bytes32(userId)`. Charges a USD-denominated ERC-20 stablecoin via `transferFrom` to the owner (price is scaled by the token's `decimals()` at call time). Subscriptions extend if still active, otherwise start fresh. MONTHLY = 30 days, ANNUAL = 360 days. Owner can change the token address and prices.
 
-**Deployment script:** `BleadDeployment.s.sol` reads `ENV_MODE` — in "development" deploys a `TestUSD` mock token alongside `Blead`; in "production" uses a real stablecoin address from env.
+**Deployment script:** `TelebuzziesDeployment.s.sol` reads `ENV_MODE` — in "development" deploys a `TestUSD` mock token alongside `Telebuzzies`; in "production" uses a real stablecoin address from env.
 
-**ABI note:** The frontend ABI (`src/config/web3/abi.ts`) references functions like `getFeesTokenDetails()` and fields like `FEES_TOKEN_MONTHLY_PRICE` that don't exist in the current `Blead.sol` in this repo. The contract or ABI may be out of sync — verify against `Blead.sol` before relying on ABI entries other than `getSubscriptionData` and `updateSubscription`.
+**ABI note:** The frontend ABI (`src/config/web3/abi.ts`) references functions like `getFeesTokenDetails()` and fields like `FEES_TOKEN_MONTHLY_PRICE` that don't exist in the current `Telebuzzies.sol` in this repo. The contract or ABI may be out of sync — verify against `Telebuzzies.sol` before relying on ABI entries other than `getSubscriptionData` and `updateSubscription`.
 
 ### Key Config Paths
 

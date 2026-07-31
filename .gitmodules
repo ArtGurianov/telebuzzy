@@ -1,6 +1,6 @@
-[submodule "bleadio-solidity/lib/forge-std"]
-	path = bleadio-solidity/lib/forge-std
+[submodule "telebuzzies-solidity/lib/forge-std"]
+	path = telebuzzies-solidity/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-[submodule "bleadio-solidity/lib/openzeppelin-contracts"]
-	path = bleadio-solidity/lib/openzeppelin-contracts
+[submodule "telebuzzies-solidity/lib/openzeppelin-contracts"]
+	path = telebuzzies-solidity/lib/openzeppelin-contracts
 	url = https://github.com/Openzeppelin/openzeppelin-contracts
