@@ -2,7 +2,7 @@
 
 ## Upstream counterparts
 
-5 of the docs below came from `@mydaogs/shared-docs` (adopted at 0.8.1). This tree is not redundant with the kit and is not a mirror to be collapsed: upstream states each one against placeholders, and a doc is only actionable once it names the thing you actually edit, so the local copy carries this project's paths, entities, and tooling
+5 of the docs below came from `@mydaogs/shared-docs` (adopted at 0.9.0). This tree is not redundant with the kit and is not a mirror to be collapsed: upstream states each one against placeholders, and a doc is only actionable once it names the thing you actually edit, so the local copy carries this project's paths, entities, and tooling
 
 **A fix to the rule itself belongs upstream; a fix to how this project binds it belongs here.** When the two disagree on package behaviour the kit wins and the local copy is stale — check the version actually resolved in the lockfile
 

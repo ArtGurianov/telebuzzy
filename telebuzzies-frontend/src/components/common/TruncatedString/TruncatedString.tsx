@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  truncateString,
-  TruncateStringProps,
-} from "@/lib/utils/truncatedString";
+import { truncateString, TruncateStringProps } from "@mydaogs/core";
 import { TooltipPopover } from "@/components/common/TooltipPopover/TooltipPopover";
 import { cn } from "@/lib/utils";
 
@@ -15,8 +12,9 @@ export interface TruncatedStringProps
 
 export const TruncatedString = ({
   className,
-  maxLen,
-  cutFrom,
+  leading,
+  trailing,
+  separator,
   children,
 }: TruncatedStringProps) => {
   return (
@@ -24,7 +22,7 @@ export const TruncatedString = ({
       content={children}
       className={cn("underline cursor-pointer", className)}
     >
-      {`${truncateString({ value: children, maxLen, cutFrom })}`}
+      {`${truncateString({ value: children, leading, trailing, separator })}`}
     </TooltipPopover>
   );
 };

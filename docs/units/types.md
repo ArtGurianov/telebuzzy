@@ -16,8 +16,6 @@
 `telebuzzies-frontend/src/lib/types.ts` carries the shared type helpers:
 
 ```ts
-export type ValueOf<T extends object> = T[keyof T];
-
 export type GetComponentProps<T> = T extends
   | React.ComponentType<infer P>
   | React.Component<infer P>
@@ -26,5 +24,7 @@ export type GetComponentProps<T> = T extends
 
 export type NonUndefined<T> = T extends undefined ? never : T;
 ```
+
+`ValueOf<T extends object> = T[keyof T]` is sourced from `@mydaogs/core` rather than defined locally
 
 Plus product types: `FormStatus`, `InterceptQueryData`, `BillingPlan`, `EmailMessageType`

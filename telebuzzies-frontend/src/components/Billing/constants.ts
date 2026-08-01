@@ -1,4 +1,4 @@
-import { ValueOf } from "@/lib/types";
+import { ValueOf } from "@mydaogs/core";
 
 export const BILLING_PLANS_SOLIDITY_KEYS = {
   MONTLY: "MONTLY",

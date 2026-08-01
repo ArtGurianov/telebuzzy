@@ -1,4 +1,4 @@
-import { ValueOf } from "@/lib/types";
+import { ValueOf } from "@mydaogs/core";
 import { useWindowSize } from "./useWindowSize";
 
 const BREAKPOINTS = {

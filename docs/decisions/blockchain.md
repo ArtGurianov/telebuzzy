@@ -30,6 +30,8 @@ This decision has no upstream copy — it is required and project-specific
 | `production` + `NEXT_PUBLIC_NETWORK=testnet` | Sepolia |
 | `production` + `NEXT_PUBLIC_NETWORK=mainnet` | BSC |
 
+`getAppChain()` resolves the table above through `@mydaogs/web3`'s `createChainResolver`, fed the app's own foundry/sepolia/bsc map and `NEXT_PUBLIC_APP_ENV` in the resolver's `NODE_ENV` slot
+
 Each chain gets its own `Telebuzzies` deployment (own proxy address, own admin set) — there is no bridging or shared state between them.
 
 ## Onchain vs. offchain split

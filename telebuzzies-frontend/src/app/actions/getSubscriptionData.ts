@@ -5,7 +5,7 @@ import { telebuzziesContractAbi } from "@/config/web3/abi";
 import { viemClient } from "@/config/web3/viemClient";
 import { subscriptionDataSchema } from "@/lib/schemas/subscriptionDataSchema";
 import {
-  AppClientError,
+  AppBusinessError,
   createActionResponse,
   stringToBytes32,
 } from "@/lib/utils/";
@@ -22,7 +22,10 @@ export const getSubscriptionData = async (userId: string) => {
     });
     const validationResult = subscriptionDataSchema.safeParse(subscriptionData);
     if (!validationResult.success) {
-      throw new AppClientError("Received incorrect value type from blockchain");
+      throw new AppBusinessError(
+        "Received incorrect value type from blockchain",
+        500
+      );
     }
 
     return createActionResponse({

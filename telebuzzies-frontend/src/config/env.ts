@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createEnvConfig } from "@mydaogs/web3";
 
 const CLIENT_ENV = {
   NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
@@ -61,28 +62,12 @@ const serverEnvSchema = clientEnvSchema.extend({
     .url(),
 });
 
-export const getClientConfig = () => {
-  const validationResult = clientEnvSchema.safeParse(CLIENT_ENV);
-  if (!validationResult.success) {
-    const errorStr = validationResult.error.errors.reduce(
-      (temp, next) =>
-        `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
-      ""
-    );
-    throw new Error(`Env vars validation failed: ${errorStr}`);
-  }
-  return validationResult.data;
-};
+export const getClientConfig = createEnvConfig({
+  schema: clientEnvSchema,
+  source: CLIENT_ENV,
+});
 
-export const getServerConfig = () => {
-  const validationResult = serverEnvSchema.safeParse(process.env);
-  if (!validationResult.success) {
-    const errorStr = validationResult.error.errors.reduce(
-      (temp, next) =>
-        `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
-      ""
-    );
-    throw new Error(`Env vars validation failed: ${errorStr}`);
-  }
-  return validationResult.data;
-};
+export const getServerConfig = createEnvConfig({
+  schema: serverEnvSchema,
+  source: process.env,
+});

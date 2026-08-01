@@ -1,7 +1,7 @@
 "use client";
 
-import { telebuzziesContractAbi, usdContractAbi } from "@/config/web3/abi";
-import { formatUnits } from "viem";
+import { telebuzziesContractAbi } from "@/config/web3/abi";
+import { erc20Abi, formatUnits } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import { ButtonsBlock } from "./ButtonsBlock";
 import { BILLING_PLANS_SOLIDITY_KEYS } from "./constants";
@@ -42,7 +42,7 @@ export const BillingDialog = () => {
     isError: isErrorBalance,
     refetch: refetchBalance,
   } = useReadContract({
-    abi: usdContractAbi,
+    abi: erc20Abi,
     address: validationResult.data?.tokenAddress as `0x${string}`,
     functionName: "balanceOf",
     args: [address!],
@@ -75,7 +75,7 @@ export const BillingDialog = () => {
     isError: isErrorAllowance,
     refetch: refetchAllowance,
   } = useReadContract({
-    abi: usdContractAbi,
+    abi: erc20Abi,
     address: validationResult.data?.tokenAddress as `0x${string}`,
     functionName: "allowance",
     args: [address!, ENV_CONFIG.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`],

@@ -1,13 +1,11 @@
 import db from "@/config/db";
 import { appDataSchema } from "@/lib/schemas/appDataSchema";
-import { AppClientError, formatDataMessage } from "@/lib/utils";
+import { AppBusinessError, formatDataMessage } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { getSubscriptionData } from "@/app/actions/getSubscriptionData";
 import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
-import { formatErrorMessage } from "@/lib/utils/formatErrorMessage";
-import { subscriptionDataSchema } from "@/lib/schemas/subscriptionDataSchema";
+import { formatErrorMessage } from "@mydaogs/contract";
 import { calculateBillingPeriodStartTimestamp } from "@/lib/utils/calculateBillingPeriod";
-import { z } from "zod";
 import { getServerConfig } from "@/config/env";
 import { sendEmail } from "@/app/actions/sendEmail";
 import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
@@ -25,25 +23,24 @@ export async function POST(request: Request) {
           `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
         ""
       );
-      throw new AppClientError(`Fields verification failed: ${errorStr}`);
+      throw new AppBusinessError(`Fields verification failed: ${errorStr}`, 400);
     }
 
     const { apiKey, ...rest } = verificationResult.data;
 
     const user = await db.user.findFirst({ where: { apiKey } });
     if (!user) {
-      throw new AppClientError("Api key not found");
+      throw new AppBusinessError("Api key not found", 404);
     }
     if (!user.tgUserId) {
-      throw new AppClientError("Please register api key in bot first");
+      throw new AppBusinessError("Please register api key in bot first", 400);
     }
-    const { data: subscriptionData, errorMessage: subsctiptionErrorMessage } =
-      await getSubscriptionData(user.id);
-    if (subsctiptionErrorMessage) {
-      throw new AppClientError(subsctiptionErrorMessage);
+    const subscriptionResult = await getSubscriptionData(user.id);
+    if (!subscriptionResult.success) {
+      throw new AppBusinessError(subscriptionResult.errorMessage, 500);
     }
     const { subscriptionStartTimestamp, subscriptionEndTimestamp } =
-      subscriptionData as z.infer<typeof subscriptionDataSchema>;
+      subscriptionResult.data;
     const billingPlan = getUserBillingPlan(Number(subscriptionEndTimestamp));
     const messagesLimitNumber =
       billingPlan === "PRO"
@@ -69,10 +66,11 @@ export async function POST(request: Request) {
           data: { limitReachedEmailSent: true },
         });
       }
-      throw new AppClientError(
+      throw new AppBusinessError(
         `Number of messages has exceeded limit.${
           billingPlan === "LIGHT" ? " Consider upgrading to the PRO plan" : ""
-        }`
+        }`,
+        429
       );
     }
     const isResetBillingPeriod =

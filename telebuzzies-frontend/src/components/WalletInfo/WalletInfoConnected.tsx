@@ -2,8 +2,8 @@
 
 import { useAccount, useReadContract } from "wagmi";
 import { DisconnectWalletBtn } from "../Buttons/DisconnectWalletBtn";
-import { formatUnits } from "viem";
-import { telebuzziesContractAbi, usdContractAbi } from "@/config/web3/abi";
+import { erc20Abi, formatUnits } from "viem";
+import { telebuzziesContractAbi } from "@/config/web3/abi";
 import { getClientConfig } from "@/config/env";
 import { TruncatedString } from "../common/TruncatedString/TruncatedString";
 import { TooltipPopover } from "../common/TooltipPopover/TooltipPopover";
@@ -33,7 +33,7 @@ export const WalletInfoConnected = () => {
     isLoading: isLoadingBalance,
     isError: isErrorBalance,
   } = useReadContract({
-    abi: usdContractAbi,
+    abi: erc20Abi,
     address: validationResult.data?.tokenAddress as `0x${string}`,
     functionName: "balanceOf",
     args: [address!],
@@ -63,7 +63,7 @@ export const WalletInfoConnected = () => {
       <div className="flex flex-col gap-1 justify-center items-start">
         <p className="flex gap-2 justify-center items-center flex-wrap font-mono font-medium">
           {"Connected:"}
-          <TruncatedString cutFrom="middle">{address!}</TruncatedString>
+          <TruncatedString>{address!}</TruncatedString>
         </p>
         <p className="flex justify-center items-center gap-1 font-mono">
           {`Balance: ${displayBalance}`}

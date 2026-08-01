@@ -1,4 +1,4 @@
-import { ValueOf } from "@/lib/types";
+import { ValueOf } from "@mydaogs/core";
 
 export const CODEBLOCKS_KEYS = {
   javascript: "javascript",

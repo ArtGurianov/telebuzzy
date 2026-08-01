@@ -1,8 +1,8 @@
 import db from "@/config/db";
 import { getServerConfig } from "@/config/env";
 import { uuidSchema } from "@/lib/schemas/uuidSchema";
-import { AppClientError } from "@/lib/utils";
-import { formatErrorMessage } from "@/lib/utils/formatErrorMessage";
+import { AppBusinessError } from "@/lib/utils";
+import { formatErrorMessage } from "@mydaogs/contract";
 import { NextResponse } from "next/server";
 
 const ENV_CONFIG = getServerConfig();
@@ -23,7 +23,7 @@ export async function POST(
   try {
     const { token } = await params;
     if (token !== ENV_CONFIG.TG_BOT_TOKEN) {
-      throw new AppClientError("Unauthorized webhook call");
+      throw new AppBusinessError("Unauthorized webhook call", 401);
     }
 
     const body = await request.json();
@@ -44,7 +44,7 @@ export async function POST(
       typeof text !== "string" ||
       typeof is_bot !== "boolean"
     ) {
-      throw new AppClientError("Error while parsing data.");
+      throw new AppBusinessError("Error while parsing data.", 400);
     }
     userId = id;
     userText = text;
@@ -58,11 +58,12 @@ export async function POST(
 
   try {
     if (userIsBot) {
-      throw new AppClientError("Only human interaction.");
+      throw new AppBusinessError("Only human interaction.", 400);
     }
     if (userText.startsWith("/start")) {
-      throw new AppClientError(
-        "Welcome to telebuzzies.xyz bot! Get your api key from the website and paste it here via /set_api_key command!"
+      throw new AppBusinessError(
+        "Welcome to telebuzzies.xyz bot! Get your api key from the website and paste it here via /set_api_key command!",
+        200
       );
     }
     if (userText.startsWith("/set_api_key")) {
@@ -72,8 +73,9 @@ export async function POST(
         parsed[0] !== "/set_api_key" ||
         !uuidSchema.safeParse(parsed[1]).success
       ) {
-        throw new AppClientError(
-          "Invalid format. Please send as `/set_api_key YOUR_KEY`"
+        throw new AppBusinessError(
+          "Invalid format. Please send as `/set_api_key YOUR_KEY`",
+          400
         );
       }
 
@@ -93,18 +95,19 @@ export async function POST(
         where: { apiKey: parsed[1] },
       });
       if (!updateUser) {
-        throw new AppClientError("ApiKey not found");
+        throw new AppBusinessError("ApiKey not found", 404);
       }
       await db.user.update({
         where: { id: updateUser.id },
         data: { tgUserId: userId },
       });
 
-      throw new AppClientError(
-        "Success! You can now start sending notifications from your services."
+      throw new AppBusinessError(
+        "Success! You can now start sending notifications from your services.",
+        200
       );
     }
-    throw new AppClientError("Command not recognized.");
+    throw new AppBusinessError("Command not recognized.", 400);
   } catch (error) {
     try {
       const qs = new URLSearchParams({

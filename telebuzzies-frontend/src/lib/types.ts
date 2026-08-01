@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
+import { ValueOf } from "@mydaogs/core";
 import { BILLING_PLANS, EMAIL_MESSAGE_TYPES } from "./utils/contsants";
 
-export type ValueOf<T extends object> = T[keyof T];
 export type GetComponentProps<T> = T extends
   | React.ComponentType<infer P>
   | React.Component<infer P>

@@ -23,7 +23,7 @@ export const ApiKeyControls = () => {
     setStatus("LOADING");
     resetApiKey(sessionData!.user.id!)
       .then((res) => {
-        updateSession({ apiKey: res.data }).finally(() => {
+        updateSession({ apiKey: res.success ? res.data : null }).finally(() => {
           setStatus(res.success ? "SUCCESS" : "ERROR");
         });
       })

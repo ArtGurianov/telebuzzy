@@ -1,10 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { usdContractAbi } from "@/config/web3/abi";
 import { GetComponentProps } from "@/lib/types";
 import { FC, useEffect } from "react";
-import { parseUnits } from "viem";
+import { erc20Abi, parseUnits } from "viem";
 import { useTransactionReceipt, useWriteContract } from "wagmi";
 import { withAuthBtn } from "../Login/withAuthBtn";
 import { toast } from "sonner";
@@ -60,7 +59,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   const sendTransaction = () => {
     if (usdContractAddress != null && typeof priceUsd === "number" && typeof decimals === "number") {
       writeContract({
-        abi: usdContractAbi,
+        abi: erc20Abi,
         address: usdContractAddress,
         functionName: "approve",
         args: [telebuzziesContractAddress, parseUnits(priceUsd.toString(), decimals)],
