@@ -3,7 +3,6 @@
 import { ApproveTransactionBtn } from "@/components/Buttons/ApproveTransactionBtn";
 import { SpendTransactionBtn } from "@/components/Buttons/SpendTransactionBtn";
 import { BillingPlansSolidityKey } from "./constants";
-import { toast } from "sonner";
 
 interface ButtonsBlockProps {
   usdContractAddress?: `0x${string}`;
@@ -49,13 +48,9 @@ export const ButtonsBlock = ({
           currentAllowanceUsd={allowance}
           currentBalanceUsd={balance}
           decimals={decimals}
-          onSuccess={() => {
-            onRefetchAllowance();
-            toast("Successfully updated allowance!");
-          }}
-          onError={() => {
-            toast("An error occured while performing a transaction");
-          }}
+          successMessage="Successfully updated allowance!"
+          onSuccess={onRefetchAllowance}
+          onError={() => {}}
         >{`Approve ${priceUsd || ""} USD`}</ApproveTransactionBtn>
         <SpendTransactionBtn
           contractAddress={telebuzziesContractAddress}
@@ -63,14 +58,12 @@ export const ButtonsBlock = ({
           currentAllowanceUsd={allowance}
           currentBalanceUsd={balance}
           billingPlan={billingPlan}
+          successMessage="Well done! Successfully updated your subscription!"
           onSuccess={() => {
             onRefetchAllowance();
             onRefetchBalance();
-            toast("Well done! Successfully updated your subscription!");
           }}
-          onError={() => {
-            toast("An error occured while performing a transaction");
-          }}
+          onError={() => {}}
         >
           {"Purchase"}
         </SpendTransactionBtn>

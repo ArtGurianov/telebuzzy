@@ -15,7 +15,6 @@ import { useSubscription } from "@/components/Providers/SubscriptionProvider";
 import { useSession } from "next-auth/react";
 import { sendEmail } from "@/app/actions/sendEmail";
 import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
-import { toast } from "sonner";
 import { buildPendingTxConflictKey } from "@mydaogs/web3-tx";
 import { useAppWriteContract, usePendingTxScope } from "@/config/web3/txClient";
 import { TX_ACTION, TX_CONFLICT, TX_ENTITY } from "@/config/web3/txSync";
@@ -26,6 +25,7 @@ interface SpendTransactionBtnProps extends GetComponentProps<typeof Button> {
   priceUsd?: number;
   contractAddress: `0x${string}`;
   billingPlan: BillingPlansSolidityKey;
+  successMessage?: string;
   onSuccess: () => void;
   onError: () => void;
 }
@@ -36,6 +36,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   priceUsd,
   contractAddress,
   billingPlan,
+  successMessage,
   onSuccess,
   onError,
   children,
@@ -44,16 +45,16 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   const { address } = useAccount();
   const { refetch } = useSubscription();
 
+  // The submit/success/error toasts come from `useAppWriteContract` itself
+  // (see `txClient.ts`'s `toastAdapter`/`useMessages`) - do not toast here
+  // too, or every tx state shows two toasts.
   const { writeContract, isProcessing, isError } = useAppWriteContract({
-    onTransactionSubmitted: () => {
-      toast("Transaction is sent!");
-    },
     // `queryKeysToInvalidate` below already refreshes every active
     // `useReadContract` read - including the subscription context's - once
     // reconciliation finishes, which would cover this. `refetch()` is kept
     // as a second, independent path so a subscription read that is not
     // "active" in react-query's sense at that moment (e.g. mid-remount)
-    // still gets refreshed. See the report for why both are kept.
+    // still gets refreshed.
     onSuccess: () => {
       refetch();
       onSuccess();
@@ -62,6 +63,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
     onError: () => {
       onError();
     },
+    successMessage,
     queryKeysToInvalidate: [["readContract"]],
   });
 

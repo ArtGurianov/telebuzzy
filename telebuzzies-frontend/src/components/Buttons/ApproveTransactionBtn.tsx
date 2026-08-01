@@ -6,7 +6,6 @@ import { FC } from "react";
 import { erc20Abi, parseUnits } from "viem";
 import { useAccount } from "wagmi";
 import { withAuthBtn } from "../Login/withAuthBtn";
-import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { buildPendingTxConflictKey } from "@mydaogs/web3-tx";
 import { useAppWriteContract, usePendingTxScope } from "@/config/web3/txClient";
@@ -19,6 +18,7 @@ interface ApproveTransactionBtnProps extends GetComponentProps<typeof Button> {
   usdContractAddress?: `0x${string}`;
   telebuzziesContractAddress: `0x${string}`;
   decimals?: number;
+  successMessage?: string;
   onSuccess: () => void;
   onError: () => void;
 }
@@ -30,6 +30,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   usdContractAddress,
   telebuzziesContractAddress,
   decimals,
+  successMessage,
   onSuccess,
   onError,
   children,
@@ -37,16 +38,17 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   const { data } = useSession();
   const { address } = useAccount();
 
+  // The submit/success/error toasts come from `useAppWriteContract` itself
+  // (see `txClient.ts`'s `toastAdapter`/`useMessages`) - do not toast here
+  // too, or every tx state shows two toasts.
   const { writeContract, isProcessing, isError } = useAppWriteContract({
-    onTransactionSubmitted: () => {
-      toast("Transaction is sent!");
-    },
     onSuccess: () => {
       onSuccess();
     },
     onError: () => {
       onError();
     },
+    successMessage,
     queryKeysToInvalidate: [["readContract"]],
   });
 
