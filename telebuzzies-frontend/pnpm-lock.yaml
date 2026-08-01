@@ -15,26 +15,26 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.55.0(react@19.1.0))
       '@mydaogs/contract':
-        specifier: ^0.9.0
-        version: 0.9.0
+        specifier: ^0.9.2
+        version: 0.9.2
       '@mydaogs/core':
-        specifier: ^0.9.0
-        version: 0.9.0
+        specifier: ^0.9.2
+        version: 0.9.2
       '@mydaogs/query':
-        specifier: ^0.9.0
-        version: 0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))
+        specifier: ^0.9.2
+        version: 0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))
       '@mydaogs/ui':
         specifier: ^0.9.2
         version: 0.9.2(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(next@15.3.0(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-hook-form@7.55.0(react@19.1.0))(react@19.1.0)
       '@mydaogs/web3':
-        specifier: ^0.9.0
-        version: 0.9.0(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)
+        specifier: ^0.9.2
+        version: 0.9.2(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)
       '@mydaogs/web3-client':
-        specifier: ^0.9.0
-        version: 0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))(react@19.1.0)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.16(@tanstack/query-core@5.74.3)(@tanstack/react-query@5.74.3(react@19.1.0))(@types/react@19.1.2)(bufferutil@4.0.9)(preact-render-to-string@6.5.11(preact@10.11.3))(react@19.1.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))(zod@3.24.3)
+        specifier: ^0.9.2
+        version: 0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))(react@19.1.0)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.16(@tanstack/query-core@5.74.3)(@tanstack/react-query@5.74.3(react@19.1.0))(@types/react@19.1.2)(bufferutil@4.0.9)(preact-render-to-string@6.5.11(preact@10.11.3))(react@19.1.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))(zod@3.24.3)
       '@mydaogs/web3-tx':
-        specifier: ^0.9.0
-        version: 0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))
+        specifier: ^0.9.2
+        version: 0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))
       '@prisma/client':
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
@@ -1237,17 +1237,14 @@ packages:
     resolution: {integrity: sha512-z10PF9JV6SbjFq+/rYabM+8CVlMokgl8RFGvieSGNTmrkQanfHn+15XBrhG3BgUfvmTeSeyShfOHpG0i9zEdcg==}
     deprecated: Motion One for Vue is deprecated. Use Oku Motion instead https://oku-ui.com/motion
 
-  '@mydaogs/contract@0.9.0':
-    resolution: {integrity: sha512-8kqW45HNLBYrHHPw9SxgBD+fuPX/ZkI5WwkiApsZkujkjHgjBgQPLFk6dXddHH4jM0nrztpUhfCdqllyJXgxsQ==}
-
-  '@mydaogs/core@0.9.0':
-    resolution: {integrity: sha512-8mUaVPgUxPXRuVLPXjuzSvSsrgYB13ZL/9Jynt9vgBf9bsxr7vED+xq5FTBOoRhYjQAQIuZlgou1JGKeuuwZaQ==}
+  '@mydaogs/contract@0.9.2':
+    resolution: {integrity: sha512-zXbCSGBf5QByIP+OvTBpI6QGYcXgxesbyAL3zuP8vQZX3VJLv8nLYQmyuFZZHuavc8dM70+B6ErZaRlmMCCDVA==}
 
   '@mydaogs/core@0.9.2':
     resolution: {integrity: sha512-HElOnZbyTlT+0T+Wztzyap3TNiyMJPHQuriPt56fYgWatk5wD7ljMnBSDpenCuOoGzoVVPaN41cFBzFnOeVRZg==}
 
-  '@mydaogs/query@0.9.0':
-    resolution: {integrity: sha512-tjFbWN0aMubo8UiqMAqyVd2DQ0aKG4fofTTxfNHLjFS2RY7ZozgmJhRUjCICSN19r+JT0BXiHc0GJkulsfKq6w==}
+  '@mydaogs/query@0.9.2':
+    resolution: {integrity: sha512-xqffNabQLkgQ1iUGNqQees5kz5gIh3mPXJNLNJuI3oNL+yIlIN/s3JJVMvXALJhfegOvPVbVNa7cslF0QFMn+g==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
 
@@ -1264,21 +1261,21 @@ packages:
       react-hook-form:
         optional: true
 
-  '@mydaogs/web3-client@0.9.0':
-    resolution: {integrity: sha512-z6wigX2bfUMcaZ9ehjjSxR5BHvfIGgvbQPvocRS75u5Z6QVfpMrvqrLIx8oJcvSDKuOoLuCN5kdwI7Ok6yBtMQ==}
+  '@mydaogs/web3-client@0.9.2':
+    resolution: {integrity: sha512-1GbxYfCDt1dk/5L1I0xbbXUl5hVRJAyFDfkp285D0s8pJsTEZZ1SHRlPkKrDG7egL/fUGgZZkFb170jGvBJeMQ==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
       react: ^18.0.0 || ^19.0.0
       viem: ^2.0.0
       wagmi: ^2.0.0 || ^3.0.0
 
-  '@mydaogs/web3-tx@0.9.0':
-    resolution: {integrity: sha512-XIR3/3MIWDTJ4YfZQBZBQdoq/bcMeqJR+hc44Ynyf/fQzmmbUfZF2FkMBSsvPidLnQeEm81TU3Xv7ZXJk9yK2w==}
+  '@mydaogs/web3-tx@0.9.2':
+    resolution: {integrity: sha512-PxgApBR2+kb4bkLbuiSRnDubxgcYHzws69k/zb5w5KQ9xbttbGrnn1Nb/GnPFd2rQUc5x0aVXoibiOn+/7B/rg==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
 
-  '@mydaogs/web3@0.9.0':
-    resolution: {integrity: sha512-UV1VTOz7CyPdhB7cvIFcb2nxAF9MBQipVZr/0PtnRotR/7WpnHM53mxTW51abEoQhoFLCZgQcFGs9PhjO3/NiA==}
+  '@mydaogs/web3@0.9.2':
+    resolution: {integrity: sha512-wnmv2s0Nuj8SB0eDr25VHgQ04tHgTuBFIPqXT90QfMmNHv76dhfwkyWhi6Wr/Al3Zi4OG+ZEMB8+99QVNf+msg==}
     peerDependencies:
       viem: ^2.0.0
       zod: ^3.23.0
@@ -6435,15 +6432,13 @@ snapshots:
       '@motionone/dom': 10.18.0
       tslib: 2.8.1
 
-  '@mydaogs/contract@0.9.0':
+  '@mydaogs/contract@0.9.2':
     dependencies:
-      '@mydaogs/core': 0.9.0
-
-  '@mydaogs/core@0.9.0': {}
+      '@mydaogs/core': 0.9.2
 
   '@mydaogs/core@0.9.2': {}
 
-  '@mydaogs/query@0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))':
+  '@mydaogs/query@0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))':
     dependencies:
       '@tanstack/react-query': 5.74.3(react@19.1.0)
 
@@ -6487,11 +6482,11 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  '@mydaogs/web3-client@0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))(react@19.1.0)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.16(@tanstack/query-core@5.74.3)(@tanstack/react-query@5.74.3(react@19.1.0))(@types/react@19.1.2)(bufferutil@4.0.9)(preact-render-to-string@6.5.11(preact@10.11.3))(react@19.1.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))(zod@3.24.3)':
+  '@mydaogs/web3-client@0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))(react@19.1.0)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(wagmi@2.14.16(@tanstack/query-core@5.74.3)(@tanstack/react-query@5.74.3(react@19.1.0))(@types/react@19.1.2)(bufferutil@4.0.9)(preact-render-to-string@6.5.11(preact@10.11.3))(react@19.1.0)(typescript@5.8.3)(utf-8-validate@5.0.10)(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3))(zod@3.24.3)':
     dependencies:
-      '@mydaogs/core': 0.9.0
-      '@mydaogs/web3': 0.9.0(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)
-      '@mydaogs/web3-tx': 0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))
+      '@mydaogs/core': 0.9.2
+      '@mydaogs/web3': 0.9.2(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)
+      '@mydaogs/web3-tx': 0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))
       '@tanstack/react-query': 5.74.3(react@19.1.0)
       react: 19.1.0
       viem: 2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3)
@@ -6499,13 +6494,13 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@mydaogs/web3-tx@0.9.0(@tanstack/react-query@5.74.3(react@19.1.0))':
+  '@mydaogs/web3-tx@0.9.2(@tanstack/react-query@5.74.3(react@19.1.0))':
     dependencies:
-      '@mydaogs/contract': 0.9.0
-      '@mydaogs/core': 0.9.0
+      '@mydaogs/contract': 0.9.2
+      '@mydaogs/core': 0.9.2
       '@tanstack/react-query': 5.74.3(react@19.1.0)
 
-  '@mydaogs/web3@0.9.0(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)':
+  '@mydaogs/web3@0.9.2(viem@2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3))(zod@3.24.3)':
     dependencies:
       viem: 2.27.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.3)
       zod: 3.24.3
