@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { useDisconnect } from "wagmi";
 
 export const DisconnectWalletBtn = () => {

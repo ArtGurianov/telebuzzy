@@ -11,7 +11,7 @@ import { UpgradeBanner } from "@/components/UpgradeBanner/UpgradeBanner";
 import Image from "next/image";
 import { wagmiConfig } from "@/config/web3/wagmiConfig";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@mydaogs/ui/client";
 import { Footer } from "@/components/Footer/Footer";
 import { LoginDialog } from "@/components/Login/LoginDialog";
 
@@ -62,7 +62,7 @@ export default async function RootLayout({
           <UserProfileBtn
             className="absolute top-4 right-2 md:right-8 lg:opacity-60 lg:hover:opacity-100"
             variant="unset"
-            size="unset"
+            size="reset"
           >
             <Image
               src={UserSvgUrl}

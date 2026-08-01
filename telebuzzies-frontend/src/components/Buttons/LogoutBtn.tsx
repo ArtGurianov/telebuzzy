@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { LogoutSvgUrl } from "@/components/svg";
 import { signOut } from "next-auth/react";
 
@@ -10,7 +10,7 @@ export const LogoutBtn = () => {
     <Button
       onClick={() => signOut()}
       variant="link"
-      size="unset"
+      size="reset"
       className="flex gap-1 text-lg font-light font-mono"
     >
       <Image

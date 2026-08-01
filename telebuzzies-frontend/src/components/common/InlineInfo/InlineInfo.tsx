@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 import { AlertCircleIcon } from "lucide-react";
-import { TooltipPopover } from "@/components/common/TooltipPopover/TooltipPopover";
+import { TooltipPopover } from "@mydaogs/ui/client";
 
 interface InlineInfoProps {
   className?: string;

@@ -5,24 +5,35 @@ import {
 } from "@mydaogs/web3-client";
 import { TxMessages, TxToastAdapter } from "@mydaogs/web3-tx";
 import { createExplorerUrls } from "@mydaogs/web3";
-import { toast } from "sonner";
+import { createElement } from "react";
+import { toast } from "@mydaogs/ui/client";
 import { getAppChain } from "@/lib/utils";
 import { txSyncStorage } from "./txSync";
 
 /**
- * Sonner adapter satisfying `TxToastAdapter`. `show` keys the toast by tx
- * hash so a pending -> reconciling update replaces the same toast in place
- * instead of stacking a new one.
+ * `@mydaogs/ui`'s `toast` adapter satisfying `TxToastAdapter`. `show` keys
+ * the toast by tx hash so a pending -> reconciling update replaces the same
+ * toast in place instead of stacking a new one.
+ *
+ * Kit's `ToastOptions.action` renders as a `ReactNode` (its own clickable
+ * wrapper only handles dismiss-on-click bookkeeping), unlike sonner's native
+ * `{ label, onClick }` action shape - build the action as an element here.
  */
 const toastAdapter: TxToastAdapter = {
   show: ({ txHash, message, action }) => {
     toast(message, {
       id: txHash,
       action: action
-        ? {
-            label: action.label,
-            onClick: () => window.open(action.url, "_blank", "noopener,noreferrer"),
-          }
+        ? createElement(
+            "button",
+            {
+              type: "button",
+              className: "underline underline-offset-2",
+              onClick: () =>
+                window.open(action.url, "_blank", "noopener,noreferrer"),
+            },
+            action.label
+          )
         : undefined,
     });
   },

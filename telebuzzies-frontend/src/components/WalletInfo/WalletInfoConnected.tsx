@@ -5,8 +5,7 @@ import { DisconnectWalletBtn } from "../Buttons/DisconnectWalletBtn";
 import { erc20Abi, formatUnits } from "viem";
 import { telebuzziesContractAbi } from "@/config/web3/abi";
 import { getClientConfig } from "@/config/env";
-import { TruncatedString } from "../common/TruncatedString/TruncatedString";
-import { TooltipPopover } from "../common/TooltipPopover/TooltipPopover";
+import { TruncatedString, TooltipPopover } from "@mydaogs/ui/client";
 import { AlertCircleIcon } from "lucide-react";
 import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
 
@@ -63,7 +62,9 @@ export const WalletInfoConnected = () => {
       <div className="flex flex-col gap-1 justify-center items-start">
         <p className="flex gap-2 justify-center items-center flex-wrap font-mono font-medium">
           {"Connected:"}
-          <TruncatedString>{address!}</TruncatedString>
+          <TruncatedString maxLen={11} cutFrom="middle">
+            {address!}
+          </TruncatedString>
         </p>
         <p className="flex justify-center items-center gap-1 font-mono">
           {`Balance: ${displayBalance}`}

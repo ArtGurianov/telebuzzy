@@ -8,9 +8,9 @@ import {
   CODEBLOCKS_ORDER,
 } from "./constants";
 import { CodeBlock, androidstudio as theme } from "react-code-blocks";
-import { Clipboard } from "@/components/common/Clipboard/Clipboard";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
+import { CopyToClipboardBtn } from "@mydaogs/ui/client";
 
 export const InstructionsUsage = () => {
   const [lang, setLang] = useState<CodeblockKey>(CODEBLOCKS_KEYS.bash);
@@ -40,7 +40,7 @@ export const InstructionsUsage = () => {
             >
               <Button
                 variant="unset"
-                size="unset"
+                size="reset"
                 className="w-full h-full text-xl font-serif"
                 onClick={() => {
                   setLang(each);
@@ -52,11 +52,13 @@ export const InstructionsUsage = () => {
           ))}
         </ul>
         <div className="relative">
-          <Clipboard
-            theme="light"
-            value={CODEBLOCKS[lang]}
-            className="absolute top-4 right-4 w-8 h-8"
-          />
+          <div className="absolute top-4 right-4">
+            <CopyToClipboardBtn
+              value={CODEBLOCKS[lang]}
+              size="icon"
+              variant="ghost"
+            />
+          </div>
           <CodeBlock
             customStyle={{ borderRadius: "0px" }}
             language={lang}

@@ -1,5 +1,5 @@
 import { withAuthBtn } from "@/components/Login/withAuthBtn";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { GetComponentProps } from "@/lib/types";
 
 interface ResetApiKeyBtnProps extends GetComponentProps<typeof Button> {

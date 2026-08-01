@@ -2,7 +2,7 @@
 
 import { DialogDrawer } from "@/components/common/DialogDrawer/DialogDrawer";
 import { FormStatus } from "@/lib/types";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import {
   Form,
   FormControl,
@@ -10,8 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@mydaogs/ui/form";
+import { Input } from "@mydaogs/ui/client";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

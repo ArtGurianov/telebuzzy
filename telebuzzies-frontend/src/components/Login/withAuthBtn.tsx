@@ -2,7 +2,7 @@
 
 import { GetComponentProps } from "@/lib/types";
 import { FC, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { useSession } from "next-auth/react";
 
 export const withAuthBtn = <T extends GetComponentProps<typeof Button>>(

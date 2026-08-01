@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import Link from "next/link";
 
 export const InstructionsTelegramBot = () => {

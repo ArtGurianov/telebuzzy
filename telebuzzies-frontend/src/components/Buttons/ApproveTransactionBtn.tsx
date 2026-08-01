@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { GetComponentProps } from "@/lib/types";
 import { FC } from "react";
 import { erc20Abi, parseUnits } from "viem";

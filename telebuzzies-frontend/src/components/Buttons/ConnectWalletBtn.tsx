@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { useRouter } from "next/navigation";
 import { FC, useRef } from "react";
 import { useAccount, useConnect } from "wagmi";

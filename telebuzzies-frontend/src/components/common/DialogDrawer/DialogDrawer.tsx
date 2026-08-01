@@ -1,86 +1,26 @@
 "use client";
 
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { useBreakpoint } from "@/lib/hooks/useBreakpoint";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { ComponentProps } from "react";
+import { DialogDrawer as KitDialogDrawer } from "@mydaogs/ui/client";
 
-export interface DialogDrawerProps {
-  className?: string;
-  children: ReactNode;
-  title: string;
-  isOpen: boolean;
-  onClose?: () => void;
-}
+export type DialogDrawerProps = ComponentProps<typeof KitDialogDrawer>;
 
-const DialogWrapper = ({
-  isOpen,
+/**
+ * Thin wrapper around `@mydaogs/ui/client`'s `DialogDrawer`. The kit renders
+ * the title/description chrome itself (via the single `DialogShellProvider`
+ * host mounted in `Providers.tsx`) - this wrapper only adds the app's styled
+ * content box around `children`.
+ */
+export const DialogDrawer = ({
   className,
   children,
-  title,
-  onClose,
+  ...rest
 }: DialogDrawerProps) => {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn("py-8 px-4", className)}>
-        <DialogHeader>
-          <DialogTitle className="text-center font-medium font-serif text-3xl my-4 text-muted-foreground">
-            {title}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            {`Dialog content for ${title}`}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
-          {children}
-        </div>
-      </DialogContent>
-    </Dialog>
+    <KitDialogDrawer className={className} {...rest}>
+      <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
+        {children}
+      </div>
+    </KitDialogDrawer>
   );
-};
-
-const DrawerWrapper = ({
-  className,
-  children,
-  title,
-  isOpen,
-  onClose,
-}: DialogDrawerProps) => {
-  return (
-    <Drawer open={isOpen} onClose={onClose} autoFocus={isOpen}>
-      <DrawerContent className={cn("px-2 py-2", className)}>
-        <DrawerHeader>
-          <DrawerTitle className="text-center font-medium font-serif text-3xl text-muted-foreground">
-            {title}
-          </DrawerTitle>
-          <DrawerDescription className="sr-only">
-            {`Drawer content for ${title}`}
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
-          {children}
-        </div>
-      </DrawerContent>
-    </Drawer>
-  );
-};
-
-export const DialogDrawer = (props: DialogDrawerProps) => {
-  const isWindowOverSM = useBreakpoint("sm");
-
-  const Comp = isWindowOverSM ? DialogWrapper : DrawerWrapper;
-  return <Comp {...props} />;
 };

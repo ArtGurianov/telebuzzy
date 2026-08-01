@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { telebuzziesContractAbi } from "@/config/web3/abi";
 import { stringToBytes32 } from "@/lib/utils";
 import { useAccount } from "wagmi";

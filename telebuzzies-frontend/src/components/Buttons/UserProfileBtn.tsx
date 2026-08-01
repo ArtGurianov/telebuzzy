@@ -2,7 +2,7 @@
 
 import { PopoverDrawer } from "@/components/common/PopoverDrawer/PopoverDrawer";
 import { withAuthBtn } from "@/components/Login/withAuthBtn";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mydaogs/ui";
 import { LogoutBtn } from "./LogoutBtn";
 import { useSession } from "next-auth/react";
 import { useSubscription } from "../Providers/SubscriptionProvider";
@@ -134,7 +134,7 @@ const UserProfileBtnCore = ({
                       {displayData[each].value}
                       <Button
                         className="px-2 font-serif rounded-l-none rounded-r-full"
-                        size="unset"
+                        size="reset"
                       >
                         <Link href="/billing">
                           {displayBillingPlan === "PRO" ? "EXTEND" : "UPGRADE"}

@@ -5,7 +5,7 @@ import { ResetApiKeyBtn } from "@/components/Buttons/ResetApiKeyBtn";
 import { FormStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Clipboard } from "@/components/common/Clipboard/Clipboard";
+import { CopyToClipboardBtn } from "@mydaogs/ui/client";
 import { useSession } from "next-auth/react";
 
 const API_KEY_MASK = "••••••••-••••-••••-••••-••••••••••••";
@@ -48,9 +48,10 @@ export const ApiKeyControls = () => {
     >
       <span className="grow">{displayValue}</span>
       {!!sessionData?.user?.apiKey ? (
-        <Clipboard
+        <CopyToClipboardBtn
           value={sessionData.user.apiKey}
-          className="w-6 self-stretch"
+          size="icon"
+          variant="ghost"
         />
       ) : null}
       <ResetApiKeyBtn

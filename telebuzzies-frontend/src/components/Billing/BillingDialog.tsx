@@ -12,7 +12,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@mydaogs/ui/client";
 import { WalletInfo } from "../WalletInfo/WalletInfo";
 import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
 import { MyDaogsPromo } from "../MyDaogsPromo/MyDaogsPromo";

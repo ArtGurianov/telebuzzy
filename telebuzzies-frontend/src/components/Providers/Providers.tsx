@@ -8,6 +8,7 @@ import { CACHE_TIMES } from "@mydaogs/query";
 import { SubscriptionProvider } from "./SubscriptionProvider";
 import { SessionProvider } from "next-auth/react";
 import { PendingTxWatcher } from "@/config/web3/txClient";
+import { DialogShellProvider } from "@mydaogs/ui/client";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -40,7 +41,9 @@ export const Providers = ({ children, initialState }: ProvidersProps) => {
     <SessionProvider>
       <WagmiProvider config={config} initialState={initialState}>
         <QueryClientProvider client={queryClient}>
-          <SubscriptionProvider>{children}</SubscriptionProvider>
+          <SubscriptionProvider>
+            <DialogShellProvider>{children}</DialogShellProvider>
+          </SubscriptionProvider>
           <PendingTxWatcherMount />
         </QueryClientProvider>
       </WagmiProvider>
