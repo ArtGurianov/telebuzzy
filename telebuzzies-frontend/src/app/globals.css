@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+@import "@mydaogs/ui/styles.css";
 
 @theme inline {
   --color-background: var(--background);
@@ -43,12 +43,27 @@
   --muted: hsl(340, 29%, 28%);
   --muted-foreground: hsl(216, 96%, 10%);
   --accent: hsl(143, 100%, 91%);
-  --accent-foreground: hsl(93, 100%, 50%);
+  /* Hover-state background for @mydaogs/ui's outline/ghost button variants
+     (shadcn's accent-foreground token is unconventionally used as a hover bg,
+     not a text color) - a light tint near --secondary, not acid green. */
+  --accent-foreground: var(--secondary);
   --destructive: hsl(0 100% 50%);
   --destructive-foreground: hsl(0 100% 98%);
   --border: hsl(216, 96%, 10%);
   --input: hsl(216, 36%, 25%);
   --ring: hsl(216, 31%, 20%);
+
+  /* @mydaogs/ui palette bridge - token contract consumed by kit components,
+     see node_modules/@mydaogs/ui/theming.md. Mapped onto the palette above. */
+  --main: var(--primary);
+  --main-foreground: var(--primary-foreground);
+  --overlay: hsl(216, 96%, 6%);
+  --danger: var(--destructive);
+  --success: hsl(142, 50%, 62%);
+  --error: hsl(0, 70%, 68%);
+  --info: hsl(206, 65%, 62%);
+  --warn: hsl(38, 90%, 62%);
+  --system: hsl(216, 25%, 55%);
 }
 
 @layer base {
