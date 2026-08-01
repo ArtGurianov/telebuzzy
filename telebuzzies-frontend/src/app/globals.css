@@ -64,6 +64,18 @@
   --info: hsl(206, 65%, 62%);
   --warn: hsl(38, 90%, 62%);
   --system: hsl(216, 25%, 55%);
+
+  /* Left at the kit's 0px default, every shadow-shadow surface (default/
+     primary/secondary/danger Button, DialogContent) renders with zero
+     shadow - the vendored Button this replaced used Tailwind's shadow-xs on
+     those same variants, so this app did have a visible (if subtle) shadow
+     before. A 1px offset is the closest this app gets to that with the
+     kit's box-shadow-x/y mechanism, which only derives hard-edged offset
+     shadows, not blur - nowhere near motherhunt's 4px neobrutalist look. */
+  --box-shadow-x: 1px;
+  --box-shadow-y: 1px;
+  --reverse-box-shadow-x: -1px;
+  --reverse-box-shadow-y: -1px;
 }
 
 @layer base {
