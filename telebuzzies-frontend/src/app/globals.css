@@ -65,17 +65,18 @@
   --warn: hsl(38, 90%, 62%);
   --system: hsl(216, 25%, 55%);
 
-  /* Left at the kit's 0px default, every shadow-shadow surface (default/
-     primary/secondary/danger Button, DialogContent) renders with zero
-     shadow - the vendored Button this replaced used Tailwind's shadow-xs on
-     those same variants, so this app did have a visible (if subtle) shadow
-     before. A 1px offset is the closest this app gets to that with the
-     kit's box-shadow-x/y mechanism, which only derives hard-edged offset
-     shadows, not blur - nowhere near motherhunt's 4px neobrutalist look. */
-  --box-shadow-x: 1px;
-  --box-shadow-y: 1px;
-  --reverse-box-shadow-x: -1px;
-  --reverse-box-shadow-y: -1px;
+  /* Left unset, every shadow-shadow surface (default/primary/secondary/
+     danger Button, DialogContent) renders with the kit's 0px default -
+     completely flat. The vendored Button this replaced used Tailwind's
+     shadow-xs (0 1px 2px 0 rgb(0 0 0 / 0.05), a soft blur) on those same
+     variants, which the box-shadow-x/y mechanism can't reproduce - it only
+     derives hard-edged offset shadows, no blur. Hardcoded directly instead
+     (theming.md's documented exemption: an app that wants a soft shadow and
+     no active:translate press-shift hardcodes --shadow and leaves
+     box-shadow-x/y at their 0px defaults, rather than fighting the
+     derivation with a hard offset that also makes the press effect
+     non-no-op). Nowhere near motherhunt's 4px neobrutalist restoration. */
+  --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
 @layer base {
