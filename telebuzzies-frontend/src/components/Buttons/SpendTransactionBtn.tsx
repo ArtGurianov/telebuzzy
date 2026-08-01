@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { telebuzziesContractAbi } from "@/config/web3/abi";
 import { stringToBytes32 } from "@/lib/utils";
-import { useTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
 import {
   BILLING_PLANS_SOLIDITY_KEYS_MAP,
   BillingPlansSolidityKey,
 } from "@/components/Billing/constants";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { withAuthBtn } from "@/components/Login/withAuthBtn";
 import { GetComponentProps } from "@/lib/types";
 import { useSubscription } from "@/components/Providers/SubscriptionProvider";
@@ -16,6 +16,9 @@ import { useSession } from "next-auth/react";
 import { sendEmail } from "@/app/actions/sendEmail";
 import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
 import { toast } from "sonner";
+import { buildPendingTxConflictKey } from "@mydaogs/web3-tx";
+import { useAppWriteContract, usePendingTxScope } from "@/config/web3/txClient";
+import { TX_ACTION, TX_CONFLICT, TX_ENTITY } from "@/config/web3/txSync";
 
 interface SpendTransactionBtnProps extends GetComponentProps<typeof Button> {
   currentAllowanceUsd?: number;
@@ -38,57 +41,72 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
   children,
 }) => {
   const { data } = useSession();
-
-  const { writeContract, data: hash, isError: isTxError } = useWriteContract();
-
-  useEffect(() => {
-    if (hash) {
-      toast("Transaction is sent!");
-    }
-  }, [hash]);
-
+  const { address } = useAccount();
   const { refetch } = useSubscription();
 
-  const {
-    isFetching,
-    isSuccess,
-    isError: isReceiptError,
-  } = useTransactionReceipt({ hash });
-
-  useEffect(() => {
-    if (isSuccess) {
+  const { writeContract, isProcessing, isError } = useAppWriteContract({
+    onTransactionSubmitted: () => {
+      toast("Transaction is sent!");
+    },
+    // `queryKeysToInvalidate` below already refreshes every active
+    // `useReadContract` read - including the subscription context's - once
+    // reconciliation finishes, which would cover this. `refetch()` is kept
+    // as a second, independent path so a subscription read that is not
+    // "active" in react-query's sense at that moment (e.g. mid-remount)
+    // still gets refreshed. See the report for why both are kept.
+    onSuccess: () => {
       refetch();
       onSuccess();
       sendEmail(data!.user.email!, EMAIL_MESSAGE_TYPES.SUBSCRIPTION_UPGRADED);
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (isTxError || isReceiptError) {
+    },
+    onError: () => {
       onError();
-    }
-  }, [isTxError, isReceiptError]);
+    },
+    queryKeysToInvalidate: [["readContract"]],
+  });
+
+  const pendingScope = usePendingTxScope({
+    entityType: TX_ENTITY.SUBSCRIPTION,
+    account: address ?? null,
+  });
+  const isBlockedByPendingTx = data?.user.id
+    ? pendingScope.blockingEntryByConflictKey.has(
+        buildPendingTxConflictKey(data.user.id, TX_CONFLICT.UPDATE_SUBSCRIPTION)
+      )
+    : false;
 
   const sendTransaction = () => {
     if (data?.user.id) {
-      writeContract({
-        abi: telebuzziesContractAbi,
-        address: contractAddress,
-        functionName: "updateSubscription",
-        args: [
-          stringToBytes32(data.user.id),
-          BILLING_PLANS_SOLIDITY_KEYS_MAP[billingPlan],
-        ],
-      });
+      writeContract(
+        {
+          abi: telebuzziesContractAbi,
+          address: contractAddress,
+          functionName: "updateSubscription",
+          args: [
+            stringToBytes32(data.user.id),
+            BILLING_PLANS_SOLIDITY_KEYS_MAP[billingPlan],
+          ],
+        },
+        {
+          pendingItems: [
+            {
+              entityType: TX_ENTITY.SUBSCRIPTION,
+              entityId: data.user.id,
+              conflictKey: TX_CONFLICT.UPDATE_SUBSCRIPTION,
+              actionKey: TX_ACTION.UPDATE_SUBSCRIPTION,
+            },
+          ],
+        }
+      );
     }
   };
 
   return (
     <Button
       disabled={
-        isTxError ||
-        isReceiptError ||
-        isFetching ||
+        isError ||
+        isProcessing ||
+        isBlockedByPendingTx ||
         !priceUsd ||
         typeof currentAllowanceUsd !== "number" ||
         currentAllowanceUsd < priceUsd ||
@@ -99,7 +117,7 @@ const SpendTransactionBtnCore: FC<SpendTransactionBtnProps> = ({
         sendTransaction();
       }}
     >
-      {!isFetching ? children : "waiting..."}
+      {!isProcessing && !isBlockedByPendingTx ? children : "waiting..."}
     </Button>
   );
 };

@@ -2,11 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { GetComponentProps } from "@/lib/types";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { erc20Abi, parseUnits } from "viem";
-import { useTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
 import { withAuthBtn } from "../Login/withAuthBtn";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { buildPendingTxConflictKey } from "@mydaogs/web3-tx";
+import { useAppWriteContract, usePendingTxScope } from "@/config/web3/txClient";
+import { TX_ACTION, TX_CONFLICT, TX_ENTITY } from "@/config/web3/txSync";
 
 interface ApproveTransactionBtnProps extends GetComponentProps<typeof Button> {
   currentAllowanceUsd?: number;
@@ -30,49 +34,66 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
   onError,
   children,
 }) => {
-  const { writeContract, data: hash, isError: isTxError } = useWriteContract();
+  const { data } = useSession();
+  const { address } = useAccount();
 
-  useEffect(() => {
-    if (hash) {
+  const { writeContract, isProcessing, isError } = useAppWriteContract({
+    onTransactionSubmitted: () => {
       toast("Transaction is sent!");
-    }
-  }, [hash]);
-
-  const {
-    isFetching,
-    isSuccess,
-    isError: isReceiptError,
-  } = useTransactionReceipt({ hash });
-
-  useEffect(() => {
-    if (isSuccess) {
+    },
+    onSuccess: () => {
       onSuccess();
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (isTxError || isReceiptError) {
+    },
+    onError: () => {
       onError();
-    }
-  }, [isTxError, isReceiptError]);
+    },
+    queryKeysToInvalidate: [["readContract"]],
+  });
+
+  const pendingScope = usePendingTxScope({
+    entityType: TX_ENTITY.SUBSCRIPTION,
+    account: address ?? null,
+  });
+  const isBlockedByPendingTx = data?.user.id
+    ? pendingScope.blockingEntryByConflictKey.has(
+        buildPendingTxConflictKey(data.user.id, TX_CONFLICT.APPROVE_USD)
+      )
+    : false;
 
   const sendTransaction = () => {
-    if (usdContractAddress != null && typeof priceUsd === "number" && typeof decimals === "number") {
-      writeContract({
-        abi: erc20Abi,
-        address: usdContractAddress,
-        functionName: "approve",
-        args: [telebuzziesContractAddress, parseUnits(priceUsd.toString(), decimals)],
-      });
+    if (
+      data?.user.id &&
+      usdContractAddress != null &&
+      typeof priceUsd === "number" &&
+      typeof decimals === "number"
+    ) {
+      writeContract(
+        {
+          abi: erc20Abi,
+          address: usdContractAddress,
+          functionName: "approve",
+          args: [telebuzziesContractAddress, parseUnits(priceUsd.toString(), decimals)],
+        },
+        {
+          pendingItems: [
+            {
+              entityType: TX_ENTITY.SUBSCRIPTION,
+              entityId: data.user.id,
+              conflictKey: TX_CONFLICT.APPROVE_USD,
+              actionKey: TX_ACTION.APPROVE_USD,
+            },
+          ],
+        }
+      );
     }
   };
 
   return (
     <Button
       disabled={
-        isTxError ||
-        isReceiptError ||
-        isFetching ||
+        isError ||
+        isProcessing ||
+        isBlockedByPendingTx ||
         !usdContractAddress ||
         typeof decimals !== "number" ||
         typeof priceUsd !== "number" ||
@@ -83,7 +104,7 @@ const ApproveTransactionBtnCore: FC<ApproveTransactionBtnProps> = ({
       }
       onClick={() => sendTransaction()}
     >
-      {!isFetching ? children : "waiting..."}
+      {!isProcessing && !isBlockedByPendingTx ? children : "waiting..."}
     </Button>
   );
 };

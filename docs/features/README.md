@@ -33,26 +33,29 @@ The list below covers every blueprint the kit carries, including the ones that s
 
 ## Features list (file name + one sentence short description)
 
-### Web3 (2)
+### Web3 (5)
 
 1. `ARCH-network-config.md` → `@mydaogs/web3` - Centralized chain selection driven by env config
 2. `ARCH-env-config-split.md` → `@mydaogs/web3` - Client/server environment variable separation with Zod validation
+3. `ARCH-contract-write-wrapper.md` → `@mydaogs/web3-client` - `useAppWriteContract` wraps a wagmi write with submission/receipt/reconciliation lifecycle, hash-keyed toast updates, and query invalidation
+4. `ARCH-durable-pending-tx-sync.md` → `@mydaogs/web3-tx` - Versioned per-hash localStorage registry backing cross-tab transaction ownership, retry scheduling, and reload recovery
+5. `ARCH-pending-transactions.md` → `@mydaogs/web3-tx` - `usePendingTxScope` and `PendingTxWatcher` read the durable registry to block conflicting submissions and resume unowned transactions
 
 ### Indexing (1)
 
-3. `ARCH-event-processing-pipeline.md` → `@mydaogs/indexer` - Event processor with atomic deduplication, retries, ordering guards, and a terminal-failure taxonomy
+6. `ARCH-event-processing-pipeline.md` → `@mydaogs/indexer` - Event processor with atomic deduplication, retries, ordering guards, and a terminal-failure taxonomy
 
 ### Data Fetching & Caching (1)
 
-4. `ARCH-query-invalidation-pattern.md` → `@mydaogs/web3-client` - Automatic query invalidation on blockchain transactions
+7. `ARCH-query-invalidation-pattern.md` → `@mydaogs/web3-client` - Automatic query invalidation on blockchain transactions
 
 ### API & Server Actions (3)
 
-5. `ARCH-backend-api-contract.md` → `@mydaogs/contract` - Versioned backend route contract and transport rules
-6. `ARCH-api-response-wrapper.md` → `@mydaogs/contract` - Standardized response creation utilities for routes and actions
-7. `ARCH-app-business-error.md` → `@mydaogs/contract` - Custom error class with status codes and localized code resolution
+8. `ARCH-backend-api-contract.md` → `@mydaogs/contract` - Versioned backend route contract and transport rules
+9. `ARCH-api-response-wrapper.md` → `@mydaogs/contract` - Standardized response creation utilities for routes and actions
+10. `ARCH-app-business-error.md` → `@mydaogs/contract` - Custom error class with status codes and localized code resolution
 
 ### Forms & Validation (2)
 
-8. `ARCH-zod-schema-validation.md` - Zod schemas for all forms and request payloads
-9. `ARCH-react-hook-form-integration.md` - Form handling with react-hook-form and zodResolver
+11. `ARCH-zod-schema-validation.md` - Zod schemas for all forms and request payloads
+12. `ARCH-react-hook-form-integration.md` - Form handling with react-hook-form and zodResolver

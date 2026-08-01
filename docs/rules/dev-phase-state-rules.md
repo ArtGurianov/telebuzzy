@@ -37,12 +37,13 @@ For a versioned envelope, when the shape changes:
 - Do not add cleanup code for keys or shapes from an earlier generation. A rejecting reader already makes them unreachable, and the cleanup itself becomes stale history
 - Do not document the earlier generations. The doc describes the current version only
 
-Maintain a table of every versioned envelope in the project. None exist yet — `telebuzzies-frontend` has no browser-storage records, KV cache entries, or cross-service wire contracts today (its `wagmi` cookie-storage state follows wagmi's own versioning, not one this project defines)
+Maintain a table of every versioned envelope in the project (its `wagmi` cookie-storage state follows wagmi's own versioning, not one this project defines, so it is not listed here)
 
 When adding a versioned envelope, give it a version from the start and add it here:
 
 | Envelope | Location | How a mismatch resolves |
 | --- | --- | --- |
+| Pending subscription tx record | `localStorage`, key `tx_sync:<hash>` (`@mydaogs/web3-tx`'s `createTxSyncStorage`, wired in `telebuzzies-frontend/src/config/web3/txSync.ts`) | Reader accepts only `version: 1` with a recognized entity/action/conflict key from the `SUBSCRIPTION` vocabulary; anything else is discarded on read | --- |
 
 An **unversioned** persisted record is acceptable only when every read is a defensive lookup that falls back to a default, so a shape change degrades to "value not restored" rather than corrupting state. Give it a version the moment it carries anything a stale value could break
 
