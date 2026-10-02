@@ -8,5 +8,6 @@
  "scripts": {
   "check:docs": "check-docs-adoption docs",
   "check:docs-links": "check-docs-links docs"
- }
+ },
+ "packageManager": "pnpm@10.29.3"
 }
