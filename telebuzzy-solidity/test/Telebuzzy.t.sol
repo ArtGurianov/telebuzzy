@@ -10,9 +10,7 @@ import {DeployFixture} from "./helpers/DeployFixture.sol";
 contract TelebuzzyTest is DeployFixture {
     bytes32 internal testUserId = bytes32(abi.encodePacked("random_string"));
 
-    function _approveAndSubscribe(address _subscriber, Telebuzzy.SubscriptionPlan _plan, bytes32 _userIdHash)
-        internal
-    {
+    function _approveAndSubscribe(address _subscriber, Telebuzzy.SubscriptionPlan _plan, bytes32 _userIdHash) internal {
         uint256 priceUSD = _plan == Telebuzzy.SubscriptionPlan.MONTHLY ? MONTHLY_PRICE_USD : ANNUAL_PRICE_USD;
         uint256 priceUnits = priceUSD * 10 ** usdt.decimals();
         vm.prank(_subscriber);

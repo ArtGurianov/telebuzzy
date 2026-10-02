@@ -33,10 +33,11 @@ There is no frontend test suite; tests exist only in the Solidity package.
 forge build                    # Compile contracts
 forge test                     # Run tests (test/Telebuzzy.t.sol)
 forge test --match-test <name> -vvvv   # Run a single test, verbose
-forge script script/TelebuzzyDeployment.s.sol --rpc-url <RPC> --broadcast  # Deploy
+forge script script/deployments/FullDeployment.s.sol --rpc-url sepolia --broadcast --verify  # Deploy
+pnpm abi:export               # (repo root) regenerate frontend abi.ts after contract changes
 ```
 
-Uses Foundry with `forge-std` and `openzeppelin-contracts` as git submodule dependencies. Remappings in `remappings.txt`. Deployment reads env vars: `ENV_MODE`, `DEPLOYER_PRIVATE_KEY`, `MONTHLY_PRICE_USD`, `ANNUAL_PRICE_USD`, and (production only) `USD_CONTRACT_ADDRESS`.
+Uses Foundry with `forge-std`, `openzeppelin-contracts-upgradeable`, `openzeppelin-foundry-upgrades` and `mydaogs-ecosystem-contracts` as git submodule dependencies. Remappings in `remappings.txt`. Deployment reads env vars (see `.env.example`): `NETWORK`, `DEPLOYER_PRIVATE_KEY`, `MONTHLY_PRICE_USD`, `ANNUAL_PRICE_USD`, optional `PREDEPLOYED_ADDRESS_USD` / `PREDEPLOYED_ADDRESS_DIVIDENDS` (required on mainnet), plus `SEPOLIA_RPC_URL` / `ETHERSCAN_API_KEY`.
 
 ## Architecture
 
@@ -64,11 +65,11 @@ Uses Foundry with `forge-std` and `openzeppelin-contracts` as git submodule depe
 
 ### Solidity
 
-**`Telebuzzy.sol`:** Ownable contract managing subscriptions keyed by `bytes32(userId)`. Charges a USD-denominated ERC-20 stablecoin via `transferFrom` to the owner (price is scaled by the token's `decimals()` at call time). Subscriptions extend if still active, otherwise start fresh. MONTHLY = 30 days, ANNUAL = 360 days. Owner can change the token address and prices.
+**`Telebuzzy.sol`:** UUPS-upgradeable `MyDaogsAbstractProject` (behind an `ERC1967Proxy`) managing subscriptions keyed by `bytes32(userId)`. Charges whole-USD prices in the fees token resolved by the dividends contract (`getFeesTokenDetails()`, scaled by its `decimals()`), sending 100% of each charge to the dividends contract. Subscriptions extend if still active, otherwise start fresh. MONTHLY = 30 days, ANNUAL = 360 days. Project admins/super-admins can change prices. See `docs/decisions/blockchain.md`.
 
-**Deployment script:** `TelebuzzyDeployment.s.sol` reads `ENV_MODE` — in "development" deploys a `TestUSD` mock token alongside `Telebuzzy`; in "production" uses a real stablecoin address from env.
+**Deployment script:** `script/deployments/FullDeployment.s.sol` (via `TelebuzzyModule`) deploys the `Telebuzzy` implementation + `ERC1967Proxy`. Unless predeployed addresses are given, it also deploys `TestUSDT` and `MyDaogsIsolatedDividends`; with `NETWORK=mainnet` the predeployed addresses are mandatory. The logged proxy address is `NEXT_PUBLIC_CONTRACT_ADDRESS`.
 
-**ABI note:** The frontend ABI (`src/config/web3/abi.ts`) references functions like `getFeesTokenDetails()` and fields like `FEES_TOKEN_MONTHLY_PRICE` that don't exist in the current `Telebuzzy.sol` in this repo. The contract or ABI may be out of sync — verify against `Telebuzzy.sol` before relying on ABI entries other than `getSubscriptionData` and `updateSubscription`.
+**ABI:** The frontend ABI (`telebuzzy-frontend/src/config/web3/abi.ts`) is generated from the compiled contract by `telebuzzy-solidity/scripts/export-abi.sh` (`pnpm abi:export` at the repo root) — never edit it by hand. CI fails if it is stale.
 
 ### Key Config Paths
 

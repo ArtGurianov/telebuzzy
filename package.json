@@ -7,7 +7,8 @@
  },
  "scripts": {
   "check:docs": "check-docs-adoption docs",
-  "check:docs-links": "check-docs-links docs"
+  "check:docs-links": "check-docs-links docs",
+  "abi:export": "./telebuzzy-solidity/scripts/export-abi.sh"
  },
  "packageManager": "pnpm@10.29.3"
 }
