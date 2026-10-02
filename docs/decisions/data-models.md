@@ -11,7 +11,7 @@ This decision has no upstream copy — it is required and project-specific
 
 ## Decision
 
-Offchain storage is a single MongoDB database (Prisma, `telebuzzies-frontend/prisma/schema.prisma`) with four models — the Auth.js v5 adapter's three standard models, plus `User` extended with this product's own fields:
+Offchain storage is a single MongoDB database (Prisma, `telebuzzy-frontend/prisma/schema.prisma`) with four models — the Auth.js v5 adapter's three standard models, plus `User` extended with this product's own fields:
 
 - **`User`** — one row per end user. Auth.js fields (`email`, `emailVerified`, `name`, `image`) sit alongside:
   - `apiKey` (`String`, default a fresh UUID) — the credential e-businesses pass to `POST /api/notify`; looked up there to resolve the user

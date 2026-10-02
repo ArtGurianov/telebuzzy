@@ -43,13 +43,13 @@ When adding a versioned envelope, give it a version from the start and add it he
 
 | Envelope | Location | How a mismatch resolves |
 | --- | --- | --- |
-| Pending subscription tx record | `localStorage`, key `tx_sync:<hash>` (`@mydaogs/web3-tx`'s `createTxSyncStorage`, wired in `telebuzzies-frontend/src/config/web3/txSync.ts`) | Reader accepts only `version: 1` with a recognized entity/action/conflict key from the `SUBSCRIPTION` vocabulary; anything else is discarded on read | --- |
+| Pending subscription tx record | `localStorage`, key `tx_sync:<hash>` (`@mydaogs/web3-tx`'s `createTxSyncStorage`, wired in `telebuzzy-frontend/src/config/web3/txSync.ts`) | Reader accepts only `version: 1` with a recognized entity/action/conflict key from the `SUBSCRIPTION` vocabulary; anything else is discarded on read | --- |
 
 An **unversioned** persisted record is acceptable only when every read is a defensive lookup that falls back to a default, so a shape change degrades to "value not restored" rather than corrupting state. Give it a version the moment it carries anything a stale value could break
 
 ## When to use and when NOT to use
 
-- Applies to everything under `docs/` and to every versioned-envelope reader in `telebuzzies-frontend`
+- Applies to everything under `docs/` and to every versioned-envelope reader in `telebuzzy-frontend`
 - Does **not** apply to Solidity. Onchain state is not disposable in the same way: storage layout must be preserved across upgrades, migration initializers are legitimate, and `contract-lifecycle-rules.md` governs when a fresh deploy plus prune is allowed instead
 - Does **not** apply to legally required retention wording, which must describe prior processing to be accurate
 

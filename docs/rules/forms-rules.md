@@ -18,14 +18,14 @@ These rules define the default implementation pattern for forms
 ## Rules
 
 - Use `react-hook-form` with `zodResolver` for client form state and validation
-- Define or reuse a Zod schema from `telebuzzies-frontend/src/lib/schemas/*` and infer form types from that schema
-- Use the shared form primitives from `telebuzzies-frontend/src/components/ui/form.tsx` (`Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`) instead of custom ad-hoc wrappers
-- Use the shared field components in `telebuzzies-frontend/src/components/ui/*` (`Input`, `Label`, etc.)
+- Define or reuse a Zod schema from `telebuzzy-frontend/src/lib/schemas/*` and infer form types from that schema
+- Use the shared form primitives from `telebuzzy-frontend/src/components/ui/form.tsx` (`Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`) instead of custom ad-hoc wrappers
+- Use the shared field components in `telebuzzy-frontend/src/components/ui/*` (`Input`, `Label`, etc.)
 - Every editable control must have an associated label; never rely on placeholders alone
 - Inside `FormField` `render={({ field }) => ...}`, prefer `<FormLabel>` for labelable controls and wrap the control with `<FormControl>` so id/aria wiring is automatic; avoid manual `htmlFor` and manual `id` unless a component requires it
 - Use `<Label>` for non-`FormField` forms and for option labels that target explicit option ids
 - For grouped controls (radio/checkbox sets), use `<fieldset>` + `<legend>` for the group label and keep per-option labels bound to their option ids
-- Submit mutations through the server actions in `telebuzzies-frontend/src/app/actions/*` instead of client `fetch` from the form component
+- Submit mutations through the server actions in `telebuzzy-frontend/src/app/actions/*` instead of client `fetch` from the form component
 - Validate server-action form payloads with Zod (`safeParse`) before calling mutation functions
 - Server component forms may use native `<form action={serverAction}>` for simple progressive-enhancement submit flows
 - For onchain writes, keep local form state/validation with `react-hook-form` + Zod alongside the wagmi write hooks

@@ -3,7 +3,7 @@
 ## Locations
 
 - Colocated with the component/module that uses them - non reusable
-- `telebuzzies-frontend/src/lib/types.ts` - reusable within the app
+- `telebuzzy-frontend/src/lib/types.ts` - reusable within the app
 
 ## Units files lists (file path + one sentence short description)
 
@@ -13,7 +13,7 @@
 
 ### Reusable
 
-`telebuzzies-frontend/src/lib/types.ts` carries the shared type helpers:
+`telebuzzy-frontend/src/lib/types.ts` carries the shared type helpers:
 
 ```ts
 export type GetComponentProps<T> = T extends

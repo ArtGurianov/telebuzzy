@@ -12,6 +12,6 @@ Forms use react-hook-form with `zodResolver` for type-safe validation and shared
 
 ## Related files
 
-- `telebuzzies-frontend/src/components/ui/form.tsx`
-- `telebuzzies-frontend/src/lib/schemas/`
+- `telebuzzy-frontend/src/components/ui/form.tsx`
+- `telebuzzy-frontend/src/lib/schemas/`
 - `rules/forms-rules.md`

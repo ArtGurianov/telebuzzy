@@ -3,8 +3,8 @@
 ## Locations
 
 - Colocated with the component/module that uses them - non reusable
-- `telebuzzies-frontend/src/lib/utils/` - reusable within the app, re-exported via `index.ts`
-- `telebuzzies-frontend/src/lib/schemas/` - Zod validation schemas
+- `telebuzzy-frontend/src/lib/utils/` - reusable within the app, re-exported via `index.ts`
+- `telebuzzy-frontend/src/lib/schemas/` - Zod validation schemas
 
 ## Units files lists (file path + one sentence short description)
 
@@ -14,7 +14,7 @@
 
 ### Reusable
 
-`telebuzzies-frontend/src/lib/utils/index.ts` re-exports:
+`telebuzzy-frontend/src/lib/utils/index.ts` re-exports:
 
 - `cn` - Tailwind class-name merge helper
 - `AppBusinessError` - error thrown by the Telegram webhook handler to drive its reply-via-error control flow, sourced from `@mydaogs/contract`
