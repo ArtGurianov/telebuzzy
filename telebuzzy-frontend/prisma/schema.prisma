@@ -15,22 +15,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id                            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name                          String?
-  email                         String?         @unique
-  emailVerified                 DateTime?
-  image                         String?
-  apiKey                        String          @default(uuid())
-  tgUserId                      Int?
-  billingPeriodStart            DateTime        @default(now())
-  billingPeriodMessagesSent     Int             @default(0)
-  limitReachedEmailSent         Boolean         @default(false)
-  accounts                      Account[]
-  sessions                      Session[]
-  createdAt                     DateTime        @default(now())
-  updatedAt                     DateTime        @updatedAt
+  id                               String          @id @default(auto()) @map("_id") @db.ObjectId
+  name                             String?
+  email                            String?         @unique
+  emailVerified                    DateTime?
+  image                            String?
+  apiKey                           String          @default(uuid())
+  tgUserId                         Int?
+  billingPeriodStart               DateTime        @default(now())
+  billingPeriodMessagesSent        Int             @default(0)
+  billingPeriodCriticalReserveUsed Int             @default(0)
+  limitReachedEmailSent            Boolean         @default(false)
+  accounts                         Account[]
+  sessions                         Session[]
+  notifyRequests                   NotifyRequest[]
+  createdAt                        DateTime        @default(now())
+  updatedAt                        DateTime        @updatedAt
 }
 
 model Account {
@@ -46,12 +47,12 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
 }
 
@@ -61,7 +62,7 @@ model Session {
   userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -71,6 +72,20 @@ model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
+}
+
+// One row per idempotency key sent to POST /api/notify, kept for
+// IDEMPOTENCY_KEY_TTL_MS so a retried request is not delivered twice.
+model NotifyRequest {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  idempotencyKey String
+  status         String
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, idempotencyKey])
+  @@index([userId, createdAt])
 }

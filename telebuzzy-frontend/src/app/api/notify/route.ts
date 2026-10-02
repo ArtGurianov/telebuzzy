@@ -1,5 +1,8 @@
 import db from "@/config/db";
-import { appDataSchema } from "@/lib/schemas/appDataSchema";
+import {
+  appDataSchema,
+  idempotencyKeySchema,
+} from "@/lib/schemas/appDataSchema";
 import { AppBusinessError, formatDataMessage } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { getSubscriptionData } from "@/app/actions/getSubscriptionData";
@@ -8,51 +11,93 @@ import { formatErrorMessage, formatErrorStatusCode } from "@mydaogs/contract";
 import { calculateBillingPeriodStartTimestamp } from "@/lib/utils/calculateBillingPeriod";
 import { getServerConfig } from "@/config/env";
 import { sendEmail } from "@/app/actions/sendEmail";
-import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
+import {
+  EMAIL_MESSAGE_TYPES,
+  NOTIFY_SEVERITIES,
+} from "@/lib/utils/contsants";
+import { sendTelegramMessage } from "./telegram";
+import {
+  markLimitReachedEmailSent,
+  QuotaState,
+  quotaHeaders,
+  readQuota,
+  releaseQuotaSlot,
+  reserveQuotaSlot,
+  rollBillingPeriod,
+} from "./quota";
+import {
+  claimIdempotencyKey,
+  markIdempotencyKeyDelivered,
+  releaseIdempotencyKey,
+} from "./idempotency";
 
 const ENV_CONFIG = getServerConfig();
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${ENV_CONFIG.TG_BOT_TOKEN}`;
 
-const sendTelegramMessage = async (chatId: number, text: string) => {
-  let response: Response;
-  try {
-    response = await fetch(`${TELEGRAM_API_URL}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
-    });
-  } catch {
-    throw new AppBusinessError("Telegram is unreachable, please retry", 502);
-  }
-  if (response.ok) return;
+const formatValidationError = (error: {
+  errors: { path: (string | number)[]; message: string }[];
+}) =>
+  error.errors.reduce(
+    (temp, next) =>
+      `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
+    ""
+  );
 
-  const { description } = await response.json().catch(() => ({}));
-  const reason = description ?? `status ${response.status}`;
-  if (response.status === 429) {
-    throw new AppBusinessError(`Telegram rate limit: ${reason}`, 503);
+/** `Authorization: Bearer <key>`; undefined when the header is absent */
+const getBearerApiKey = (request: Request) => {
+  const header = request.headers.get("authorization");
+  if (header === null) return undefined;
+  const match = header.match(/^Bearer\s+(\S+)\s*$/i);
+  if (!match) {
+    throw new AppBusinessError(
+      "Malformed Authorization header. Expected `Bearer <api key>`",
+      401
+    );
   }
-  if (response.status >= 500) {
-    throw new AppBusinessError(`Telegram error: ${reason}`, 502);
+  return match[1];
+};
+
+const getIdempotencyKey = (request: Request, bodyKey: string | undefined) => {
+  const header = request.headers.get("idempotency-key");
+  if (header === null) return bodyKey;
+  const result = idempotencyKeySchema.safeParse(header);
+  if (!result.success) {
+    throw new AppBusinessError(
+      `Invalid Idempotency-Key header:${formatValidationError(result.error)}`,
+      400
+    );
   }
-  throw new AppBusinessError(`Telegram rejected the message: ${reason}`, 422);
+  return result.data;
 };
 
 export async function POST(request: Request) {
+  // Set once the user's quota is known, so error responses carry it too
+  let quota: QuotaState | null = null;
+
   try {
     const body = await request.json().catch(() => {
       throw new AppBusinessError("Request body must be valid JSON", 400);
     });
     const verificationResult = appDataSchema.safeParse(body);
     if (verificationResult.error) {
-      const errorStr = verificationResult.error.errors.reduce(
-        (temp, next) =>
-          `${temp} ${next.path.toString().toUpperCase()} - ${next.message};`,
-        ""
+      throw new AppBusinessError(
+        `Fields verification failed:${formatValidationError(verificationResult.error)}`,
+        400
       );
-      throw new AppBusinessError(`Fields verification failed: ${errorStr}`, 400);
     }
 
-    const { apiKey, ...rest } = verificationResult.data;
+    const {
+      apiKey: bodyApiKey,
+      idempotencyKey: bodyIdempotencyKey,
+      ...message
+    } = verificationResult.data;
+    const apiKey = getBearerApiKey(request) ?? bodyApiKey;
+    if (!apiKey) {
+      throw new AppBusinessError(
+        "Missing API key. Send it as `Authorization: Bearer <api key>`",
+        401
+      );
+    }
+    const idempotencyKey = getIdempotencyKey(request, bodyIdempotencyKey);
 
     const user = await db.user.findFirst({ where: { apiKey } });
     if (!user) {
@@ -68,43 +113,19 @@ export async function POST(request: Request) {
     const { subscriptionStartTimestamp, subscriptionEndTimestamp } =
       subscriptionResult.data;
     const billingPlan = getUserBillingPlan(Number(subscriptionEndTimestamp));
-    const messagesLimitNumber =
+    const limit =
       billingPlan === "PRO"
         ? ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_PRO
         : ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_LITE;
-    const billingPeriodStartTimestamp = calculateBillingPeriodStartTimestamp(
-      Number(subscriptionStartTimestamp) * 1000 ||
-        Math.round(user.createdAt.getTime())
+    const periodStart = new Date(
+      calculateBillingPeriodStartTimestamp(
+        Number(subscriptionStartTimestamp) * 1000 ||
+          Math.round(user.createdAt.getTime())
+      )
     );
-    if (
-      user.billingPeriodStart.getTime() === billingPeriodStartTimestamp &&
-      user.billingPeriodMessagesSent >= messagesLimitNumber
-    ) {
-      if (!user.limitReachedEmailSent) {
-        await sendEmail(
-          user.email!,
-          billingPlan === "LIGHT"
-            ? EMAIL_MESSAGE_TYPES.LIMIT_REACHED_LITE
-            : EMAIL_MESSAGE_TYPES.LIMIT_REACHED_PRO
-        );
-        await db.user.update({
-          where: { id: user.id },
-          data: { limitReachedEmailSent: true },
-        });
-      }
-      throw new AppBusinessError(
-        `Number of messages has exceeded limit.${
-          billingPlan === "LIGHT" ? " Consider upgrading to the PRO plan" : ""
-        }`,
-        429
-      );
-    }
-    // Deliver first, so a failed delivery is never counted against the quota.
-    await sendTelegramMessage(user.tgUserId, formatDataMessage(rest));
+    const quotaParams = { userId: user.id, limit, periodStart };
 
-    const isResetBillingPeriod =
-      billingPeriodStartTimestamp !== user.billingPeriodStart.getTime();
-    if (isResetBillingPeriod) {
+    if (await rollBillingPeriod(user, periodStart)) {
       await sendEmail(
         user.email!,
         billingPlan === "LIGHT"
@@ -112,24 +133,83 @@ export async function POST(request: Request) {
           : EMAIL_MESSAGE_TYPES.SUBSCRIPTION_RESET_PRO
       );
     }
-    await db.user.update({
-      where: { id: user.id },
-      data: {
-        billingPeriodMessagesSent: isResetBillingPeriod
-          ? 1
-          : user.billingPeriodMessagesSent + 1,
-        billingPeriodStart: isResetBillingPeriod
-          ? new Date(billingPeriodStartTimestamp)
-          : user.billingPeriodStart,
-        limitReachedEmailSent: false,
-      },
-    });
 
-    return NextResponse.json({}, { status: 200 });
+    let claimId: string | null = null;
+    if (idempotencyKey) {
+      const claim = await claimIdempotencyKey(user.id, idempotencyKey);
+      if (claim.kind === "duplicate") {
+        quota = await readQuota(quotaParams);
+        return NextResponse.json(
+          { duplicate: true },
+          { status: 200, headers: quotaHeaders(quota) }
+        );
+      }
+      claimId = claim.id;
+    }
+
+    try {
+      const reservation = await reserveQuotaSlot({
+        ...quotaParams,
+        critical: message.severity === NOTIFY_SEVERITIES.CRITICAL,
+      });
+      if (!reservation || reservation.slot === "criticalReserve") {
+        // The regular quota is exhausted either way
+        if (await markLimitReachedEmailSent(user.id)) {
+          await sendEmail(
+            user.email!,
+            billingPlan === "LIGHT"
+              ? EMAIL_MESSAGE_TYPES.LIMIT_REACHED_LITE
+              : EMAIL_MESSAGE_TYPES.LIMIT_REACHED_PRO
+          );
+        }
+      }
+      if (!reservation) {
+        quota = await readQuota(quotaParams);
+        throw new AppBusinessError(
+          `Number of messages has exceeded limit.${
+            billingPlan === "LIGHT" ? " Consider upgrading to the PRO plan" : ""
+          }`,
+          429
+        );
+      }
+      quota = reservation.quota;
+
+      try {
+        await sendTelegramMessage({
+          chatId: user.tgUserId,
+          text: formatDataMessage(message),
+          silent: message.severity === NOTIFY_SEVERITIES.INFO,
+        });
+      } catch (error) {
+        // A failed delivery is never counted against the quota
+        quota = await releaseQuotaSlot({
+          ...quotaParams,
+          slot: reservation.slot,
+        });
+        throw error;
+      }
+    } catch (error) {
+      if (claimId) await releaseIdempotencyKey(claimId);
+      throw error;
+    }
+
+    if (claimId) {
+      // Delivered already; if this write fails the claim goes stale and a
+      // retry after PENDING_CLAIM_STALE_MS may deliver once more
+      await markIdempotencyKeyDelivered(claimId).catch(() => undefined);
+    }
+
+    return NextResponse.json(
+      { duplicate: false },
+      { status: 200, headers: quotaHeaders(quota) }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: formatErrorMessage(error) },
-      { status: formatErrorStatusCode(error) }
+      {
+        status: formatErrorStatusCode(error),
+        headers: quota ? quotaHeaders(quota) : undefined,
+      }
     );
   }
 }

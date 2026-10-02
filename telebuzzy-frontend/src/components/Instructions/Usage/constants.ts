@@ -20,49 +20,67 @@ export const CODEBLOCKS_ORDER: CodeblockKey[] = [
 export const CODEBLOCKS: Record<CodeblockKey, string> = {
   [CODEBLOCKS_KEYS.javascript]: `const response = await fetch("https://telebuzzy.xyz/api/notify", {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: \`Bearer \${process.env.TELEBUZZY_API_KEY}\`,
+    "Idempotency-Key": crypto.randomUUID(), // reuse the same key on retries
+  },
   body: JSON.stringify({
-    apiKey: process.env.TELEBUZZY_API_KEY,
     title: "From My Business",
+    severity: "info", // "critical" | "warning" | "info"
     action: "New customer",
     email: user.email,
     timestamp: new Date().toISOString(),
   }),
 });
+console.log("Remaining:", response.headers.get("X-Telebuzzy-Remaining"));
 if (!response.ok) {
   const { error } = await response.json();
   console.error(response.status, error);
 }`,
   [CODEBLOCKS_KEYS.go]: `data := map[string]any{
-	"apiKey":    os.Getenv("TELEBUZZY_API_KEY"),
 	"title":     "From My Business",
+	"severity":  "info", // "critical" | "warning" | "info"
 	"action":    "New customer",
 	"email":     "user@example.com",
 	"timestamp": time.Now().Format(time.RFC3339),
 }
-
 jsonData, _ := json.Marshal(data)
-resp, err := http.Post(
+
+req, _ := http.NewRequest(
+	"POST",
 	"https://telebuzzy.xyz/api/notify",
-	"application/json",
 	bytes.NewBuffer(jsonData),
 )
+req.Header.Set("Content-Type", "application/json")
+req.Header.Set("Authorization", "Bearer "+os.Getenv("TELEBUZZY_API_KEY"))
+req.Header.Set("Idempotency-Key", eventID) // reuse the same key on retries
+
+resp, err := http.DefaultClient.Do(req)
 if err == nil {
 	defer resp.Body.Close()
 }`,
-  [CODEBLOCKS_KEYS.python]: `response = requests.post("https://telebuzzy.xyz/api/notify", json={
-    "apiKey": os.getenv("TELEBUZZY_API_KEY"),
-    "title": "From My Business",
-    "action": "New customer",
-    "email": user.email,
-    "timestamp": datetime.now(timezone.utc).isoformat(),
-})
+  [CODEBLOCKS_KEYS.python]: `response = requests.post(
+    "https://telebuzzy.xyz/api/notify",
+    headers={
+        "Authorization": f"Bearer {os.getenv('TELEBUZZY_API_KEY')}",
+        "Idempotency-Key": str(uuid.uuid4()),  # reuse the same key on retries
+    },
+    json={
+        "title": "From My Business",
+        "severity": "info",  # "critical" | "warning" | "info"
+        "action": "New customer",
+        "email": user.email,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    },
+)
+print("Remaining:", response.headers.get("X-Telebuzzy-Remaining"))
 if not response.ok:
     print(response.status_code, response.json()["error"])`,
   [CODEBLOCKS_KEYS.php]: `<?php
 $data = [
-    'apiKey' => getenv('TELEBUZZY_API_KEY'),
     'title' => 'From My Business',
+    'severity' => 'info', // 'critical' | 'warning' | 'info'
     'action' => 'New customer',
     'email' => $user['email'],
     'timestamp' => date(DATE_ATOM),
@@ -75,6 +93,8 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/json',
+    'Authorization: Bearer ' . getenv('TELEBUZZY_API_KEY'),
+    'Idempotency-Key: ' . $eventId, // reuse the same key on retries
 ]);
 
 $response = curl_exec($ch);
@@ -84,9 +104,11 @@ curl_close($ch);
 ?>`,
   [CODEBLOCKS_KEYS.bash]: `curl -X POST https://telebuzzy.xyz/api/notify \\
   -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer $TELEBUZZY_API_KEY" \\
+  -H "Idempotency-Key: $(uuidgen)" \\
   -d '{
-    "apiKey": "'"$TELEBUZZY_API_KEY"'",
     "title": "From My Business",
+    "severity": "info",
     "action": "New customer",
     "email": "'"$USER_EMAIL"'",
     "timestamp": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"
