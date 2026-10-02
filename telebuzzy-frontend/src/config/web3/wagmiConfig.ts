@@ -1,6 +1,7 @@
 import { cookieStorage, createConfig, createStorage } from "wagmi";
 import { createViemClient } from "./viemClient";
 import { getAppChain } from "@/lib/utils";
+import { getClientConfig } from "@/config/env";
 import { metaMask } from "wagmi/connectors";
 
 const chain = getAppChain();
@@ -14,7 +15,7 @@ export const wagmiConfig = createConfig({
   ],
   storage: createStorage({ storage: cookieStorage }),
   ssr: true,
-  client: () => createViemClient(chain),
+  client: () => createViemClient(chain, getClientConfig().NEXT_PUBLIC_RPC_URL),
 });
 
 declare module "wagmi" {

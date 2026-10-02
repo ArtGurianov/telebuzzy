@@ -21,6 +21,7 @@ Copy `.env.example` to `.env` and fill in every variable. They are validated wit
 | `NEXT_PUBLIC_APP_ENV` | `development` / `test` → local Anvil chain; `production` → public network |
 | `NEXT_PUBLIC_NETWORK` | With `production`: `testnet` → Sepolia, `mainnet` → BSC |
 | `NEXT_PUBLIC_CONTRACT_ADDRESS` | `Telebuzzy` **proxy** address (not the implementation) |
+| `NEXT_PUBLIC_RPC_URL` | Chain RPC endpoint (Infura, Alchemy, …) used by the browser and by the server as a fallback. **Required in production**: viem's built-in public RPCs are unreliable (Sepolia's no longer serves free traffic). It ships to the browser, so use a key restricted to your domain |
 | `NEXT_PUBLIC_MESSAGES_LIMIT_LITE` | Messages per 30-day period on the free plan |
 | `NEXT_PUBLIC_MESSAGES_LIMIT_PRO` | Messages per 30-day period on PRO |
 | `DATABASE_URL` | MongoDB connection string, including the database name |
@@ -28,6 +29,7 @@ Copy `.env.example` to `.env` and fill in every variable. They are validated wit
 | `AUTH_RESEND_KEY` | Resend API key (magic-link and billing emails) |
 | `TG_BOT_TOKEN` | Telegram bot token |
 | `APP_DOMAIN` | Public URL of the app, without a trailing slash, e.g. `https://telebuzzy.xyz` |
+| `RPC_URL` | *Optional.* Server-only RPC endpoint that overrides `NEXT_PUBLIC_RPC_URL` for server-side contract reads, so an unrestricted key never reaches the browser |
 
 `NEXT_PUBLIC_*` values are inlined at build time, so changing them requires a rebuild.
 

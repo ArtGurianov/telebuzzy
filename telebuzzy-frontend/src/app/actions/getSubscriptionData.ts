@@ -2,15 +2,20 @@
 
 import { getServerConfig } from "@/config/env";
 import { telebuzzyContractAbi } from "@/config/web3/abi";
-import { viemClient } from "@/config/web3/viemClient";
+import { createViemClient } from "@/config/web3/viemClient";
 import { subscriptionDataSchema } from "@/lib/schemas/subscriptionDataSchema";
 import {
   AppBusinessError,
   createActionResponse,
+  getAppChain,
   stringToBytes32,
 } from "@/lib/utils/";
 
 const ENV_CONFIG = getServerConfig();
+const viemClient = createViemClient(
+  getAppChain(),
+  ENV_CONFIG.RPC_URL ?? ENV_CONFIG.NEXT_PUBLIC_RPC_URL
+);
 
 export const getSubscriptionData = async (userId: string) => {
   try {

@@ -1,11 +1,9 @@
 import { createPublicClient, http } from "viem";
 import { AppChain } from "./networkConfig";
-import { getAppChain } from "@/lib/utils";
 
-export const createViemClient = (chain: AppChain) =>
+// Without an rpcUrl viem falls back to the chain's built-in public endpoint
+export const createViemClient = (chain: AppChain, rpcUrl?: string) =>
   createPublicClient({
     chain,
-    transport: http(),
+    transport: http(rpcUrl),
   });
-
-export const viemClient = createViemClient(getAppChain());
