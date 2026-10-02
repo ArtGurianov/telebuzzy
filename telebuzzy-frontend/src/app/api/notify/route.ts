@@ -4,7 +4,7 @@ import { AppBusinessError, formatDataMessage } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { getSubscriptionData } from "@/app/actions/getSubscriptionData";
 import { getUserBillingPlan } from "@/lib/utils/getUserBillingPlan";
-import { formatErrorMessage } from "@mydaogs/contract";
+import { formatErrorMessage, formatErrorStatusCode } from "@mydaogs/contract";
 import { calculateBillingPeriodStartTimestamp } from "@/lib/utils/calculateBillingPeriod";
 import { getServerConfig } from "@/config/env";
 import { sendEmail } from "@/app/actions/sendEmail";
@@ -13,9 +13,35 @@ import { EMAIL_MESSAGE_TYPES } from "@/lib/utils/contsants";
 const ENV_CONFIG = getServerConfig();
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${ENV_CONFIG.TG_BOT_TOKEN}`;
 
+const sendTelegramMessage = async (chatId: number, text: string) => {
+  let response: Response;
+  try {
+    response = await fetch(`${TELEGRAM_API_URL}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+    });
+  } catch {
+    throw new AppBusinessError("Telegram is unreachable, please retry", 502);
+  }
+  if (response.ok) return;
+
+  const { description } = await response.json().catch(() => ({}));
+  const reason = description ?? `status ${response.status}`;
+  if (response.status === 429) {
+    throw new AppBusinessError(`Telegram rate limit: ${reason}`, 503);
+  }
+  if (response.status >= 500) {
+    throw new AppBusinessError(`Telegram error: ${reason}`, 502);
+  }
+  throw new AppBusinessError(`Telegram rejected the message: ${reason}`, 422);
+};
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => {
+      throw new AppBusinessError("Request body must be valid JSON", 400);
+    });
     const verificationResult = appDataSchema.safeParse(body);
     if (verificationResult.error) {
       const errorStr = verificationResult.error.errors.reduce(
@@ -73,6 +99,9 @@ export async function POST(request: Request) {
         429
       );
     }
+    // Deliver first, so a failed delivery is never counted against the quota.
+    await sendTelegramMessage(user.tgUserId, formatDataMessage(rest));
+
     const isResetBillingPeriod =
       billingPeriodStartTimestamp !== user.billingPeriodStart.getTime();
     if (isResetBillingPeriod) {
@@ -96,18 +125,11 @@ export async function POST(request: Request) {
       },
     });
 
-    const qs = new URLSearchParams({
-      text: formatDataMessage(rest),
-    }).toString();
-    await fetch(
-      `${TELEGRAM_API_URL}/sendMessage?chat_id=${user.tgUserId}&${qs}&parse_mode=HTML`
-    );
-
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: formatErrorMessage(error) },
-      { status: 400 }
+      { status: formatErrorStatusCode(error) }
     );
   }
 }
