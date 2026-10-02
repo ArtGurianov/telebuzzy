@@ -23,6 +23,8 @@ forge test
 
 ## Deploying
 
+Full step-by-step procedure (dry run, deploy, recording addresses, troubleshooting): [`docs/runbooks/deploy-contracts.md`](../docs/runbooks/deploy-contracts.md).
+
 Copy `.env.example` to `.env`:
 
 | Variable | Description |

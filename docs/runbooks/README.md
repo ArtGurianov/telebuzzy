@@ -10,4 +10,4 @@ The kit ships no copy of this folder — it is project-specific by nature
 
 ## Runbooks list (file name + when to use it)
 
-Nothing here yet. Likely first entries: ci-setup.md, deploy-*.md, manage-databases-per-environment.md
+1. `deploy-contracts.md` - deploy a fresh `Telebuzzy` proxy (plus TestUSDT and dividends on testnet) to Sepolia with Foundry, then point the frontend at it
