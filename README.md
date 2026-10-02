@@ -80,7 +80,7 @@ DATE: 2026-10-02 04:49:38 UTC
 
 OTHER DATA FIELDS
 email: jane@example.com
-orderTotal: 42
+orderTotal: 67
 ```
 
 ### Responses
