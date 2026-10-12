@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowDown, KeyRound } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { GetApiKeyCta } from "./GetApiKeyCta";
 
 const CTA_BASE =
   "tb-pressable inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-base font-semibold";
@@ -48,10 +49,7 @@ export const Hero = () => {
           className="tb-rise flex w-full flex-col items-stretch justify-center gap-3 pt-1 sm:w-auto sm:flex-row"
           style={{ "--tb-delay": "360ms" } as React.CSSProperties}
         >
-          <Link href="#get-started" className={cn(CTA_BASE, "tb-cta-blue")}>
-            <KeyRound aria-hidden className="size-5" />
-            {"Get your API key"}
-          </Link>
+          <GetApiKeyCta className={CTA_BASE} />
           <Link href="#how-it-works" className={cn(CTA_BASE, "tb-cta-white")}>
             {"See how it works"}
             <ArrowDown aria-hidden className="size-5" />

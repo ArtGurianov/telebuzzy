@@ -179,8 +179,23 @@
     outline-offset: 3px;
   }
 
+  /* Blue is only 2.67:1 on dark surfaces (#282B2E code window). Inside
+     .tb-on-dark the ring is white (14.24:1); the 3px offset keeps it on the
+     dark gap, never on a selected yellow tab */
+  .tb-on-dark :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline-color: var(--tb-surface-white);
+  }
+
+  /* Kit buttons draw focus as ring + ring-offset from these tokens: render
+     the same white ring over a dark gap */
+  .tb-on-dark {
+    --ring: var(--tb-surface-white);
+    --background: #282b2e;
+  }
+
   @media (forced-colors: active) {
-    :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
+    :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible,
+    .tb-on-dark :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
       outline-color: Highlight;
     }
   }

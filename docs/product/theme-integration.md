@@ -36,6 +36,7 @@
 - App CTAs are links or `variant="unset"` buttons with the component classes from `globals.css`: `.tb-cta-blue` (primary), `.tb-cta-white` (secondary), `.tb-cta-yellow` (playful), plus `.tb-pressable` for the `scale(0.97)` press feedback
 - `--border-radius` is set alongside `--radius` because the kit reads control rounding from the former
 - Focus is a solid 2 px `--tb-brand-blue-strong` outline with 3 px offset (≥4.82:1 on white, cream, sky and muted), replacing the kit's 50%-alpha ring; forced-colors mode uses `Highlight`
+- Inside a `.tb-on-dark` container (the `#282B2E` code window) the focus ring is white (14.24:1) instead of blue (2.67:1); its offset keeps it on the dark gap, not on a selected yellow tab
 
 ## Backdrop and surfaces
 
@@ -45,7 +46,7 @@
   - `public/tt-head.webp` peeks up from below the bottom edge, rising and sinking while tipping side to side
 - Geometry is shared through `--tb-logo-top`, `--tb-logo-width`, `--tb-logo-height` and `--tb-head-width`; the hero spacer uses them to keep the logo uncovered on first paint and the footer margin uses them to reveal the head at the end of the page
 - All readable content sits on `.tb-card` (near-opaque cream) or white surfaces; no text is placed directly on the landscape
-- The delivered assets are the supplied WebP exports; the PNG masters with the SHA-256 values in the design contract are not stored in the repository
+- The three WebP files in `public/` are the brand master assets (SHA-256 in the design contract §3); there are no PNG versions. `next/image` derives responsive sizes from them at request time
 
 ## Motion
 
