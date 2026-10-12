@@ -23,3 +23,7 @@
 - `getAppChain` - maps `NEXT_PUBLIC_APP_ENV`/`NEXT_PUBLIC_NETWORK` to the active viem/wagmi chain via `@mydaogs/web3`'s `createChainResolver`
 - `stringToBytes32` - packs and pads/truncates a string (user id) into the `bytes32` key the contract stores subscriptions under, sourced from `@mydaogs/web3`
 - `truncateString` - shortens a long string for display with a leading/trailing character count, sourced from `@mydaogs/core`
+
+Imported directly from its own file (server-only, not re-exported):
+
+- `telebuzzy-frontend/src/lib/utils/verifyHcaptcha.ts` - verifies a sign-in hCaptcha token against hCaptcha's `siteverify` with `HCAPTCHA_SECRET_KEY`; any network or parse failure counts as unverified

@@ -8,6 +8,7 @@ const CLIENT_ENV = {
   NEXT_PUBLIC_RPC_URL: process.env.NEXT_PUBLIC_RPC_URL,
   NEXT_PUBLIC_MESSAGES_LIMIT_LITE: process.env.NEXT_PUBLIC_MESSAGES_LIMIT_LITE,
   NEXT_PUBLIC_MESSAGES_LIMIT_PRO: process.env.NEXT_PUBLIC_MESSAGES_LIMIT_PRO,
+  NEXT_PUBLIC_HCAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY,
 } as const;
 
 const baseClientEnvSchema = z.object({
@@ -41,6 +42,12 @@ const baseClientEnvSchema = z.object({
   NEXT_PUBLIC_MESSAGES_LIMIT_PRO: z.coerce.number({
     description: "Paid limit for api",
   }),
+  NEXT_PUBLIC_HCAPTCHA_SITE_KEY: z
+    .string({
+      description:
+        "hCaptcha site key for the sign-in form. Local development can use hCaptcha's test key 10000000-ffff-ffff-ffff-000000000001",
+    })
+    .min(1),
 });
 
 const requireRpcUrlInProduction = (
@@ -81,6 +88,12 @@ const serverEnvSchema = baseClientEnvSchema
     TG_BOT_TOKEN: z.string({
       description: "Secret token of Telebuzzy telegram bot",
     }),
+    HCAPTCHA_SECRET_KEY: z
+      .string({
+        description:
+          "hCaptcha secret used to verify sign-in tokens server-side. Pairs with NEXT_PUBLIC_HCAPTCHA_SITE_KEY; the test site key pairs with 0x0000000000000000000000000000000000000000",
+      })
+      .min(1),
     APP_DOMAIN: z
       .string({
         description: "App domain url",

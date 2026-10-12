@@ -43,6 +43,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   secret: getServerConfig().AUTH_SECRET,
   pages: {
+    // The built-in sign-in page posts to the closed HTTP sign-in endpoint;
+    // the website's login dialog is the only sign-in UI
+    signIn: "/",
     verifyRequest: "/",
   },
 });
