@@ -33,7 +33,7 @@
 
 - `@mydaogs/ui@0.9.2` renders every Button variant, including kit-internal ghost buttons such as `CopyToClipboardBtn`, with `text-main-foreground`. `--main-foreground` is therefore ink, which is readable on white, cream, sky and on the yellow `--main` fill of the `default` variant
 - Never use `variant="primary"`: ink on `--primary` blue is ~2.84:1
-- App CTAs are links or `variant="unset"` buttons with the component classes from `globals.css`: `.tb-cta-blue` (primary), `.tb-cta-white` (secondary), `.tb-cta-yellow` (playful), plus `.tb-pressable` for the `scale(0.97)` press feedback. Add `.tb-raised` to a `.tb-cta-white` button that sits directly on the backdrop (the header Account button): a darker outline and drop shadow keep it visible over white clouds
+- App CTAs are links or `variant="unset"` buttons with the component classes from `globals.css`: `.tb-cta-blue` (primary), `.tb-cta-white` (secondary), `.tb-cta-yellow` (playful), plus `.tb-pressable` for the `scale(0.97)` press feedback. The header Account button is a fixed-position `.tb-cta-yellow`, matching the upgrade banner's CTA
 - `--border-radius` is set alongside `--radius` because the kit reads control rounding from the former
 - Focus is a solid 2 px `--tb-brand-blue-strong` outline with 3 px offset (≥4.82:1 on white, cream, sky and muted), replacing the kit's 50%-alpha ring; forced-colors mode uses `Highlight`
 - Inside a `.tb-on-dark` container (the `#282B2E` code window) the focus ring is white (14.24:1) instead of blue (2.67:1); its offset keeps it on the dark gap, not on a selected yellow tab

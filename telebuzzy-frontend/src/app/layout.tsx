@@ -68,9 +68,12 @@ export default async function RootLayout({
       >
         <Backdrop />
         <Providers initialState={initialState}>
-          <header className="absolute top-0 inset-x-0 z-10 flex justify-end px-4 pt-4 md:px-8">
+          {/* Fixed so the Account button stays reachable while scrolling.
+              The full-width strip lets clicks through; only the button
+              takes them */}
+          <header className="pointer-events-none fixed top-0 inset-x-0 z-10 flex justify-end px-4 pt-4 md:px-8">
             <UserProfileBtn
-              className="tb-pressable tb-cta-white tb-raised h-11 gap-2 rounded-full px-4 text-base font-semibold"
+              className="pointer-events-auto tb-pressable tb-cta-yellow h-11 gap-2 rounded-full px-4 text-base font-semibold"
               variant="unset"
               size="reset"
             >
