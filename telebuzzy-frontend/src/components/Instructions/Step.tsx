@@ -19,7 +19,7 @@ export const Step = ({
   return (
     <li
       id={id}
-      className="grid scroll-mt-6 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 rounded-tb-card border border-tb-border-default bg-tb-surface-white p-4 md:gap-x-5 md:p-6"
+      className="grid scroll-mt-6 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 rounded-tb-card border border-tb-border-default bg-tb-surface-white/80 p-4 md:gap-x-5 md:p-6"
     >
       <span
         aria-hidden

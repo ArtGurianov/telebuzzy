@@ -70,7 +70,7 @@ export default async function RootLayout({
         <Providers initialState={initialState}>
           <header className="absolute top-0 inset-x-0 z-10 flex justify-end px-4 pt-4 md:px-8">
             <UserProfileBtn
-              className="tb-pressable tb-cta-white h-11 gap-2 rounded-full px-4 text-base font-semibold"
+              className="tb-pressable tb-cta-white tb-raised h-11 gap-2 rounded-full px-4 text-base font-semibold"
               variant="unset"
               size="reset"
             >

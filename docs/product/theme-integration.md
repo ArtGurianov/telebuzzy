@@ -33,7 +33,7 @@
 
 - `@mydaogs/ui@0.9.2` renders every Button variant, including kit-internal ghost buttons such as `CopyToClipboardBtn`, with `text-main-foreground`. `--main-foreground` is therefore ink, which is readable on white, cream, sky and on the yellow `--main` fill of the `default` variant
 - Never use `variant="primary"`: ink on `--primary` blue is ~2.84:1
-- App CTAs are links or `variant="unset"` buttons with the component classes from `globals.css`: `.tb-cta-blue` (primary), `.tb-cta-white` (secondary), `.tb-cta-yellow` (playful), plus `.tb-pressable` for the `scale(0.97)` press feedback
+- App CTAs are links or `variant="unset"` buttons with the component classes from `globals.css`: `.tb-cta-blue` (primary), `.tb-cta-white` (secondary), `.tb-cta-yellow` (playful), plus `.tb-pressable` for the `scale(0.97)` press feedback. Add `.tb-raised` to a `.tb-cta-white` button that sits directly on the backdrop (the header Account button): a darker outline and drop shadow keep it visible over white clouds
 - `--border-radius` is set alongside `--radius` because the kit reads control rounding from the former
 - Focus is a solid 2 px `--tb-brand-blue-strong` outline with 3 px offset (≥4.82:1 on white, cream, sky and muted), replacing the kit's 50%-alpha ring; forced-colors mode uses `Highlight`
 - Inside a `.tb-on-dark` container (the `#282B2E` code window) the focus ring is white (14.24:1) instead of blue (2.67:1); its offset keeps it on the dark gap, not on a selected yellow tab
@@ -45,7 +45,8 @@
   - `public/tt-logo.webp` floats near the top and bobs slowly
   - `public/tt-head.webp` peeks up from below the bottom edge, rising and sinking while tipping side to side
 - Geometry is shared through `--tb-logo-top`, `--tb-logo-width`, `--tb-logo-height` and `--tb-head-width`; the hero spacer uses them to keep the logo uncovered on first paint and the footer margin uses them to reveal the head at the end of the page
-- All readable content sits on `.tb-card` (near-opaque cream) or white surfaces; no text is placed directly on the landscape
+- All readable content sits on `.tb-card` (cream at 80% opacity) or on nested cards (white at 80%, `bg-tb-surface-white/80`), so the landscape shows through slightly; no text is placed directly on the landscape. Gray secondary text on these surfaces measures about 4.4–5.2:1 against the backdrop, so don't lower the opacity further. Illustrations of real UI (code windows, the Telegram mock) and dialogs stay opaque
+- The LITE upgrade banner is a solid dark `bg-tb-ink-primary` bar inside `.tb-on-dark`, with a `.tb-cta-yellow` CTA, so it stands out from the translucent cards
 - The three WebP files in `public/` are the brand master assets (SHA-256 in the design contract §3); there are no PNG versions. `next/image` derives responsive sizes from them at request time
 
 ## Motion

@@ -36,7 +36,7 @@ export const GoodToKnow = () => {
         {FACTS.map(({ icon: Icon, title, body }) => (
           <li
             key={title}
-            className="flex gap-4 rounded-tb-card border border-tb-border-default bg-tb-surface-white p-5"
+            className="flex gap-4 rounded-tb-card border border-tb-border-default bg-tb-surface-white/80 p-5"
           >
             <span
               aria-hidden

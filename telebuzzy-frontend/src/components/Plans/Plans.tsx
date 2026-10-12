@@ -54,7 +54,7 @@ export const Plans = () => {
           <article
             key={plan.name}
             className={cn(
-              "flex flex-col gap-5 rounded-tb-card border bg-tb-surface-white p-6",
+              "flex flex-col gap-5 rounded-tb-card border bg-tb-surface-white/80 p-6",
               plan.highlight
                 ? "border-transparent shadow-[0_0_0_3px_var(--tb-brand-pink)]"
                 : "border-tb-border-default"
