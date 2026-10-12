@@ -20,6 +20,12 @@
   --color-tb-warning: var(--tb-semantic-warning);
   --color-tb-danger: var(--tb-semantic-danger);
   --color-tb-pink-text: var(--tb-semantic-pink-text);
+  --color-tb-status-info-bg: var(--tb-status-info-bg);
+  --color-tb-status-info-dot: var(--tb-status-info-dot);
+  --color-tb-status-warning-bg: var(--tb-status-warning-bg);
+  --color-tb-status-warning-dot: var(--tb-status-warning-dot);
+  --color-tb-status-critical-bg: var(--tb-status-critical-bg);
+  --color-tb-status-critical-dot: var(--tb-status-critical-dot);
   --radius-tb-control: var(--tb-radius-control);
   --radius-tb-card: var(--tb-radius-card);
   --color-background: var(--background);
@@ -65,12 +71,20 @@
   --tb-surface-sky: #eaf6ff;
   --tb-surface-muted: #f0f4f8;
   --tb-border-default: #ced9e4;
-  --tb-border-strong: #8594a8;
+  --tb-border-strong: #6f7f95;
 
   --tb-semantic-success: #15613c;
   --tb-semantic-warning: #73510f;
   --tb-semantic-danger: #b42318;
   --tb-semantic-pink-text: #8c1765;
+  /* Status surfaces and dots are distinct from accessible text tokens */
+  --tb-status-info-bg: #eaf6ff;
+  --tb-status-info-dot: #0265e0;
+  --tb-status-warning-bg: #fff4d2;
+  --tb-status-warning-dot: #73510f;
+  --tb-status-critical-bg: #feeceb;
+  --tb-status-critical-dot: #b42318;
+
   --tb-radius-control: 0.75rem;
   --tb-radius-card: 1.5rem;
   --radius: 0.625rem;
@@ -128,6 +142,8 @@
    @mydaogs/ui currently uses --accent-foreground for ghost/outline hover BG. */
 .tb-theme {
   --radius: var(--tb-radius-control);
+  /* @mydaogs/ui reads its control radii from a separate token */
+  --border-radius: var(--tb-radius-control);
   --background: var(--tb-surface-base);
   --foreground: var(--tb-ink-primary);
   --card: var(--tb-surface-white);
@@ -157,6 +173,30 @@
   --info: var(--tb-brand-blue-strong);
   --warn: var(--tb-semantic-warning);
   --system: var(--tb-ink-secondary);
+}
+
+/* App-owned Button adapter: kit 0.9.2 shares a white --main-foreground
+   across every variant. Light variants need ink on cream/sky, including hover.
+   TelebuzzyButton attaches this class only for light variants; it does not
+   modify kit styling outside .tb-theme. */
+.tb-theme .tb-button-ink,
+.tb-theme .tb-button-ink:hover,
+.tb-theme .tb-button-ink:focus-visible {
+  color: var(--tb-ink-primary);
+}
+
+/* The kit's focus-visible:ring-ring/50 and the base outline-ring/50 are not
+   3:1 against light surfaces. Draw a solid 2px outer ring in the opt-in theme.
+   Keep browser forced-colors focus defaults available below. */
+.tb-theme :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--tb-brand-blue-strong);
+  outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  .tb-theme :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline-color: Highlight;
+  }
 }
 
 @layer base {
