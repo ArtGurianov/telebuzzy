@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-- [`product/README.md`](product/README.md) - domain entities, user types, product vision
+- [`product/README.md`](product/README.md) - domain entities, user types, product vision and Telebuzzy design contract
 - [`decisions/README.md`](decisions/README.md) - architecture decisions and system structure
 - [`rules/README.md`](rules/README.md) - hard rules for working in the repo
 - [`units/README.md`](units/README.md) - reusable code unit tracking (components, hooks, utils, types)
@@ -11,11 +11,13 @@
 
 ## Recommended reading order
 
-1. [`product/README.md`](product/README.md)
-2. [`decisions/blockchain.md`](decisions/blockchain.md)
-3. [`decisions/solidity-upgradeability.md`](decisions/solidity-upgradeability.md)
-4. [`rules/README.md`](rules/README.md)
-5. [`units/README.md`](units/README.md)
+1. [`product/design-contract-v1.md`](product/design-contract-v1.md)
+2. [`product/theme-integration.md`](product/theme-integration.md)
+3. [`product/README.md`](product/README.md)
+4. [`decisions/blockchain.md`](decisions/blockchain.md)
+5. [`decisions/solidity-upgradeability.md`](decisions/solidity-upgradeability.md)
+6. [`rules/README.md`](rules/README.md)
+7. [`units/README.md`](units/README.md)
 
 ## Reusable code pieces
 
