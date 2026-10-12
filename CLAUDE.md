@@ -76,6 +76,7 @@ Uses Foundry with `forge-std`, `openzeppelin-contracts-upgradeable`, `openzeppel
 - `src/config/auth/index.ts` — NextAuth configuration
 - `src/config/db.ts` — Prisma singleton
 - `src/config/env.ts` — Zod env validation (client + server schemas)
+- `src/config/site.ts` — SEO constants and the site origin (from `APP_DOMAIN`, which must be the public https origin); metadata/robots/sitemap/JSON-LD are described in `docs/decisions/seo.md`
 - `src/config/web3/` — ABI, network config, viem client, wagmi config
 - `prisma/schema.prisma` — MongoDB schema (User, Account, Session, VerificationToken)
 - `src/lib/utils/contsants.ts` — plan/email constants (note the misspelled filename)

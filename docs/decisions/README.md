@@ -22,6 +22,7 @@ Several upstream decision docs shipped by `@mydaogs/shared-docs` (`auth.md`, `mo
 ## Decisions list (file name + one sentence short description)
 
 1. `solidity-upgradeability.md` - UUPS proxy deployment, initializer, and upgrade authorization model
+2. `seo.md` → project-authored - what is indexed, where metadata, robots, sitemap, OG image and JSON-LD live, and the production-only indexing gate
 
 ## Decisions a project must add for itself
 
