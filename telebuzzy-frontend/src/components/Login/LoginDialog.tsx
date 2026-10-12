@@ -48,6 +48,7 @@ export const LoginDialog: FC = () => {
   });
   const [formStatus, setFormStatus] = useState<FormStatus>("PENDING");
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const captchaToken = form.watch("captchaToken");
 
   // hCaptcha tokens are single-use: every attempt needs a fresh solve
   const resetCaptcha = () => {
@@ -83,6 +84,9 @@ export const LoginDialog: FC = () => {
     <DialogDrawer
       title={"Sign in to Telebuzzy"}
       isOpen={isOpen}
+      // hCaptcha mounts its challenge popup on <body>, outside the dialog:
+      // focusing or clicking it must not count as an outside interaction
+      preventDialogOutsideInteraction
       onClose={() => {
         setIsOpen(false);
         router.push("/", { scroll: false });
@@ -163,6 +167,7 @@ export const LoginDialog: FC = () => {
                 className="tb-pressable h-11 rounded-full px-6 text-base font-semibold"
                 disabled={
                   formStatus === "LOADING" ||
+                  !captchaToken ||
                   !!Object.keys(form.formState.errors).length
                 }
               >

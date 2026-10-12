@@ -193,6 +193,13 @@
     --background: #282b2e;
   }
 
+  /* hCaptcha mounts its challenge popup on <body>. The mobile sign-in drawer
+     is modal and sets pointer-events: none on <body>, which would make the
+     challenge unclickable */
+  iframe[src*="hcaptcha"] {
+    pointer-events: auto;
+  }
+
   @media (forced-colors: active) {
     :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible,
     .tb-on-dark :is(a[href], button, input, textarea, select, summary, [role="button"], [role="link"], [role="tab"], [tabindex]:not([tabindex="-1"])):focus-visible {
