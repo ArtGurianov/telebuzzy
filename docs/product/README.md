@@ -10,4 +10,5 @@ The kit ships no copy of this folder — it is project-specific by nature
 
 ## Product docs list (file name + one sentence short description)
 
-Nothing here yet. Likely first entries: vision.md, glossary.md, user-types.md
+- [`design-contract-v1.md`](design-contract-v1.md) — proposed brand identity and website redesign contract covering assets, product UX, accessibility and acceptance gates
+- [`theme-integration.md`](theme-integration.md) — opt-in Tailwind/@mydaogs UI token integration and safe rollout checklist
