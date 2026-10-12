@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
-import { ExampleApi } from "@/components/ExampleApi/ExampleApi";
+import { GoodToKnow } from "@/components/GoodToKnow/GoodToKnow";
 import { Hero } from "@/components/Hero/Hero";
 import { Instructions } from "@/components/Instructions/Instructions";
-import { Motto } from "@/components/Motto/Motto";
+import { NotificationPreview } from "@/components/NotificationPreview/NotificationPreview";
+import { Plans } from "@/components/Plans/Plans";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Hero />
-      <Motto />
+      <NotificationPreview />
       <Instructions />
-      <ExampleApi />
+      <Plans />
+      <GoodToKnow />
       {children}
     </>
   );

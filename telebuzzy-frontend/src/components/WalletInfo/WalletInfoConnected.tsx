@@ -8,6 +8,7 @@ import { getClientConfig } from "@/config/env";
 import { TruncatedString, TooltipPopover } from "@mydaogs/ui/client";
 import { AlertCircleIcon } from "lucide-react";
 import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
+import { getAppChain } from "@/lib/utils/getAppChain";
 
 const ENV_CONFIG = getClientConfig();
 
@@ -60,19 +61,19 @@ export const WalletInfoConnected = () => {
   return (
     <div className="flex flex-wrap gap-4 justify-center items-center w-full px-6">
       <div className="flex flex-col gap-1 justify-center items-start">
-        <p className="flex gap-2 justify-center items-center flex-wrap font-mono font-medium">
+        <p className="flex flex-wrap items-center justify-center gap-2 font-medium">
           {"Connected:"}
           <TruncatedString maxLen={11} cutFrom="middle">
             {address!}
           </TruncatedString>
         </p>
-        <p className="flex justify-center items-center gap-1 font-mono">
+        <p className="flex items-center justify-center gap-1 text-tb-ink-secondary">
           {`Balance: ${displayBalance}`}
           {validationResult.success ? (
             <TooltipPopover
-              content={`${validationResult.data.symbol} token address is ${validationResult.data.tokenAddress} on BNB chain`}
+              content={`${validationResult.data.symbol} token address is ${validationResult.data.tokenAddress} on ${getAppChain().name}`}
             >
-              <AlertCircleIcon size={16} className="text-muted" />
+              <AlertCircleIcon size={16} className="text-tb-ink-secondary" />
             </TooltipPopover>
           ) : null}
         </p>

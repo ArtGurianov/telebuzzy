@@ -57,7 +57,7 @@ export const LoginDialog: FC = () => {
 
   return (
     <DialogDrawer
-      title={"Please login to continue."}
+      title={"Sign in to Telebuzzy"}
       isOpen={isOpen}
       onClose={() => {
         setIsOpen(false);
@@ -93,18 +93,22 @@ export const LoginDialog: FC = () => {
           />
           <div className="flex self-end justify-end">
             {formStatus === "SUCCESS" ? (
-              <span className="text-2xl text-center text-primary">
-                {"Email sent!"}
+              <span
+                role="status"
+                className="text-center font-semibold text-tb-success"
+              >
+                {"Check your inbox for the magic link"}
               </span>
             ) : (
               <Button
                 type="submit"
+                className="tb-pressable h-11 rounded-full px-6 text-base font-semibold"
                 disabled={
                   formStatus === "LOADING" ||
                   !!Object.keys(form.formState.errors).length
                 }
               >
-                {formStatus === "LOADING" ? "Loading..." : "Submit"}
+                {formStatus === "LOADING" ? "Sending…" : "Email me a link"}
               </Button>
             )}
           </div>

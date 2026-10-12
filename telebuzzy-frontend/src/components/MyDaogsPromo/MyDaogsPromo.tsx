@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const MyDaogsPromo = () => {
   return (
-    <div className="flex gap-0 justify-center items-center">
+    <div className="flex items-center justify-center gap-3 rounded-tb-card bg-tb-surface-white p-3">
       <Link href={`https://mydaogs.xyz`}>
         <Image
           src="/mydaogs-ecosystem.png"
@@ -11,15 +11,17 @@ export const MyDaogsPromo = () => {
           height="0"
           sizes="100vw"
           alt="MyDaogs"
-          className="h-auto min-w-[144px] shrink-0 grow"
-          priority
+          className="h-auto w-36 shrink-0"
         />
       </Link>
-      <p className="text-md font-serif text-center text-primary font-light">
-        {"The whole revenue is getting distributed to MyDAOgs stakeholders. "}
-        <span className="underline">
-          {<Link href={`https://mydaogs.xyz`}>{"learn more"}</Link>}
-        </span>
+      <p className="text-sm text-pretty text-tb-ink-secondary">
+        {"All revenue is distributed to MyDAOgs stakeholders. "}
+        <Link
+          className="font-medium text-tb-brand-blue-strong underline underline-offset-4"
+          href={`https://mydaogs.xyz`}
+        >
+          {"Learn more"}
+        </Link>
       </p>
     </div>
   );

@@ -9,66 +9,83 @@ import {
 } from "./constants";
 import { CodeBlock, androidstudio as theme } from "react-code-blocks";
 import { cn } from "@/lib/utils";
-import { Button } from "@mydaogs/ui";
 import { CopyToClipboardBtn } from "@mydaogs/ui/client";
+import { Step } from "../Step";
 
 export const InstructionsUsage = () => {
   const [lang, setLang] = useState<CodeblockKey>(CODEBLOCKS_KEYS.bash);
 
+  // react-code-blocks renders differently on the server; mount it client-side
   const [isInitialized, setIsInitialized] = useState(false);
   useEffect(() => {
     setIsInitialized(true);
   }, []);
-  if (!isInitialized) return null;
 
   return (
-    <li className="flex flex-col gap-0">
-      <h3 className="w-full px-2 font-mono">
-        {"3. Send notifications from anywhere"}
-      </h3>
-      <div className="flex flex-col border-y-2 border-x-1 overflow-clip rounded-md border-muted-foreground/80">
-        <ul className="flex w-full items-stretch">
-          {CODEBLOCKS_ORDER.map((each) => (
-            <li
-              className={cn(
-                "grow text-center px-2 py-1 bg-primary/30 border-x-1 border-card",
-                {
-                  "bg-card text-popover": each === lang,
-                }
-              )}
-              key={each}
-            >
-              <Button
-                variant="unset"
-                size="reset"
-                className="w-full h-full text-xl font-serif"
+    <Step
+      index={3}
+      title="Send notifications from anywhere"
+      description={
+        <>
+          {"POST to "}
+          <code className="font-mono font-medium text-tb-ink-primary">
+            {"/api/notify"}
+          </code>
+          {" with your key. Add an "}
+          <code className="font-mono font-medium text-tb-ink-primary">
+            {"Idempotency-Key"}
+          </code>
+          {" so a retry doesn’t buzz twice."}
+        </>
+      }
+    >
+      <div className="flex flex-col overflow-hidden rounded-tb-control bg-[#282b2e] shadow-tb-card">
+        <div className="flex items-center gap-1 border-b border-white/10 p-1.5">
+          <div
+            role="tablist"
+            aria-label="Code sample language"
+            className="flex grow gap-1 overflow-x-auto"
+          >
+            {CODEBLOCKS_ORDER.map((each) => (
+              <button
+                key={each}
+                type="button"
+                role="tab"
+                aria-selected={each === lang}
+                className={cn(
+                  "tb-pressable h-9 shrink-0 cursor-pointer rounded-lg px-3 font-mono text-sm text-white/70",
+                  each === lang
+                    ? "bg-tb-brand-yellow text-tb-ink-primary"
+                    : "hover:bg-white/10 hover:text-white"
+                )}
                 onClick={() => {
                   setLang(each);
                 }}
               >
                 {each}
-              </Button>
-            </li>
-          ))}
-        </ul>
-        <div className="relative">
-          <div className="absolute top-4 right-4">
+              </button>
+            ))}
+          </div>
+          <div className="shrink-0 rounded-lg bg-tb-surface-white">
             <CopyToClipboardBtn
               value={CODEBLOCKS[lang]}
               size="icon"
               variant="ghost"
             />
           </div>
-          <CodeBlock
-            customStyle={{ borderRadius: "0px" }}
-            language={lang}
-            text={CODEBLOCKS[lang]}
-            theme={theme}
-            wrapLongLines
-            showLineNumbers
-          />
+        </div>
+        <div role="tabpanel" className="min-h-80 overflow-x-auto text-sm">
+          {isInitialized ? (
+            <CodeBlock
+              customStyle={{ borderRadius: "0px", padding: "0.75rem 0" }}
+              language={lang}
+              text={CODEBLOCKS[lang]}
+              theme={theme}
+              showLineNumbers
+            />
+          ) : null}
         </div>
       </div>
-    </li>
+    </Step>
   );
 };

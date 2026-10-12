@@ -8,11 +8,12 @@ interface ResetApiKeyBtnProps extends GetComponentProps<typeof Button> {
 
 const ResetApiKeyBtnCore = ({
   children,
+  className,
   disabled,
   onClick,
 }: ResetApiKeyBtnProps) => {
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button className={className} disabled={disabled} onClick={onClick}>
       {children}
     </Button>
   );

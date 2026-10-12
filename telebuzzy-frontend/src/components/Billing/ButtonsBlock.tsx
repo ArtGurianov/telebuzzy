@@ -12,6 +12,7 @@ interface ButtonsBlockProps {
   balance?: number;
   decimals?: number;
   billingPlan: BillingPlansSolidityKey;
+  badge?: string | null;
   onRefetchAllowance: () => void;
   onRefetchBalance: () => void;
 }
@@ -24,23 +25,29 @@ export const ButtonsBlock = ({
   balance,
   decimals,
   billingPlan,
+  badge,
   onRefetchAllowance,
   onRefetchBalance,
 }: ButtonsBlockProps) => {
   return (
-    <div className="flex relative flex-col gap-3 justify-center items-center py-8 w-full max-w-[320px] border-2 rounded-xl bg-gradient-to-br from-card/40 to-muted/40">
-      {billingPlan === "ANNUAL" ? (
-        <span className="absolute top-2 right-0 px-2 bg-popover/60 rounded-l-md text-primary font-serif">
-          {"Save 30%"}
+    <div className="relative flex w-full flex-col items-stretch gap-4 rounded-tb-card border border-tb-border-default bg-tb-surface-white p-5">
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="font-display text-2xl font-semibold">
+          {billingPlan === "MONTLY" ? "30 days" : "360 days"}
+        </h3>
+        {badge ? (
+          <span className="rounded-full bg-tb-brand-yellow px-3 py-1 text-sm font-semibold">
+            {badge}
+          </span>
+        ) : null}
+      </div>
+      <p className="font-display text-4xl font-semibold">
+        {typeof priceUsd === "number" ? `$${priceUsd}` : "…"}
+        <span className="ml-1 font-sans text-base font-normal text-tb-ink-secondary">
+          {"USD"}
         </span>
-      ) : null}
-      <h2 className="text-3xl font-light font-mono text-foreground/80 text-center">
-        {billingPlan === "MONTLY" ? "30 days" : "360 days"}
-      </h2>
-      <h3 className="text-4xl font-semibold font-sans bg-accent/20 border-y-2 border-accent w-full text-center text-accent-foreground py-1">
-        {typeof priceUsd === "number" ? `${priceUsd}$` : "..."}
-      </h3>
-      <div className="flex flex-col gap-2 justify-center items-stretch mt-2 px-2">
+      </p>
+      <div className="flex flex-col items-stretch gap-2">
         <ApproveTransactionBtn
           usdContractAddress={usdContractAddress}
           telebuzzyContractAddress={telebuzzyContractAddress}

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fredoka, Geist, Geist_Mono } from "next/font/google";
 import { InterceptQueryData } from "@/lib/types";
 import { Providers } from "@/components/Providers/Providers";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 import { QueryInterceptor } from "@/components/common/DialogDrawer/QueryInterceptor";
 import { UserProfileBtn } from "@/components/Buttons/UserProfileBtn";
-import { UserSvgUrl } from "@/components/svg";
 import { UpgradeBanner } from "@/components/UpgradeBanner/UpgradeBanner";
-import Image from "next/image";
+import { Backdrop } from "@/components/Backdrop/Backdrop";
+import { UserRound } from "lucide-react";
 import { wagmiConfig } from "@/config/web3/wagmiConfig";
 import "./globals.css";
 import { Toaster } from "@mydaogs/ui/client";
@@ -25,22 +25,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Telebuzzy",
   description:
-    "Send notifications from e-businesses to your personal Telegram.",
+    "Get important updates from your apps straight to your personal Telegram. One API request. No bot to build.",
 };
 
 const INTERCEPT_QUERIES_CONFIG: InterceptQueryData[] = [
   {
     queryKey: "loggedIn",
     title: "Logged in",
-    children: <h1>{"Successfully logged in"}</h1>,
+    children: <p className="text-center text-lg">{"Successfully logged in"}</p>,
   },
   {
     queryKey: "loggedOut",
     title: "Logged out",
-    children: <h1>{"Successfully logged out"}</h1>,
+    children: (
+      <p className="text-center text-lg">{"Successfully logged out"}</p>
+    ),
   },
 ];
 
@@ -56,27 +64,23 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-start items-center bg-background bg-[url(/bg-image.png)] bg-repeat text-foreground min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} font-sans antialiased flex flex-col items-center text-foreground min-h-svh`}
       >
+        <Backdrop />
         <Providers initialState={initialState}>
-          <UserProfileBtn
-            className="absolute top-4 right-2 md:right-8 lg:opacity-60 lg:hover:opacity-100"
-            variant="unset"
-            size="reset"
-          >
-            <Image
-              src={UserSvgUrl}
-              className="w-16"
-              alt="user"
-              width="0"
-              height="0"
-              sizes="100vh"
-              priority
-            />
-          </UserProfileBtn>
-          <div className="p-4 flex flex-col justify-center items-center max-w-[720px] min-h-[calc(100vh-2rem)]">
+          <header className="absolute top-0 inset-x-0 z-10 flex justify-end px-4 pt-4 md:px-8">
+            <UserProfileBtn
+              className="tb-pressable tb-cta-white h-11 gap-2 rounded-full px-4 text-base font-semibold"
+              variant="unset"
+              size="reset"
+            >
+              <UserRound aria-hidden className="size-5" />
+              {"Account"}
+            </UserProfileBtn>
+          </header>
+          <main className="flex w-full max-w-5xl grow flex-col items-stretch gap-6 px-4 md:gap-10 md:px-8">
             {children}
-          </div>
+          </main>
           <Footer />
           <LoginDialog />
           <UpgradeBanner />
