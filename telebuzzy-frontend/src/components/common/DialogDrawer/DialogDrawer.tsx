@@ -18,7 +18,7 @@ export const DialogDrawer = ({
 }: DialogDrawerProps) => {
   return (
     <KitDialogDrawer className={className} {...rest}>
-      <div className="py-4 px-3 bg-primary/20 border border-primary rounded-md">
+      <div className="rounded-tb-control bg-tb-surface-white px-4 py-5">
         {children}
       </div>
     </KitDialogDrawer>

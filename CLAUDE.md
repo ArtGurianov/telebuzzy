@@ -61,7 +61,7 @@ Uses Foundry with `forge-std`, `openzeppelin-contracts-upgradeable`, `openzeppel
 
 **Environment:** All env vars validated via Zod schemas in `src/config/env.ts` (separate client and server schemas). `NEXT_PUBLIC_RPC_URL` is required in production — viem's built-in public RPCs are unreliable (Sepolia's default rejects free traffic); `RPC_URL` optionally overrides it server-side. Many modules call `getServerConfig()`/`getClientConfig()` at module scope, so invalid env fails at import time, not request time. See `.env.example` for required variables.
 
-**UI:** shadcn/ui components in `src/components/ui/`, Tailwind CSS v4, Radix UI primitives, Framer Motion. Responsive dialog/drawer pattern via `DialogDrawer` component.
+**UI:** shadcn/ui components in `src/components/ui/`, Tailwind CSS v4, Radix UI primitives, Framer Motion. Responsive dialog/drawer pattern via `DialogDrawer` component. Brand theme: `--tb-*` tokens in `src/app/globals.css` (see `docs/product/theme-integration.md`); the fixed brand backdrop (`public/tt-*.webp`) lives in `Backdrop.tsx`. `--main-foreground` is ink, so never use the kit Button `variant="primary"` — blue CTAs use `.tb-cta-blue`.
 
 ### Solidity
 

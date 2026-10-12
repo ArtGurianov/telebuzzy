@@ -42,26 +42,41 @@ export const ApiKeyControls = () => {
 
   return (
     <div
-      className={cn("flex px-2 py-1 justify-center items-center gap-4 w-full", {
-        "bg-red-800/20": status === "ERROR",
-      })}
+      className={cn(
+        "flex flex-col gap-3 rounded-tb-control border-2 border-tb-border-default bg-tb-surface-base p-2 sm:flex-row sm:items-center",
+        { "border-tb-danger bg-tb-status-critical-bg": status === "ERROR" }
+      )}
     >
-      <span className="grow">{displayValue}</span>
-      {!!sessionData?.user?.apiKey ? (
-        <CopyToClipboardBtn
-          value={sessionData.user.apiKey}
-          size="icon"
-          variant="ghost"
-        />
-      ) : null}
+      <div className="flex min-w-0 grow items-center gap-2 pl-2">
+        <span className="shrink-0 text-xs font-semibold tracking-wide text-tb-ink-secondary uppercase">
+          {"API key"}
+        </span>
+        <span
+          className={cn(
+            "min-w-0 grow truncate font-mono text-sm md:text-base",
+            { "text-tb-danger": status === "ERROR" }
+          )}
+          aria-live="polite"
+        >
+          {displayValue}
+        </span>
+        {!!sessionData?.user?.apiKey ? (
+          <CopyToClipboardBtn
+            value={sessionData.user.apiKey}
+            size="icon"
+            variant="ghost"
+          />
+        ) : null}
+      </div>
       <ResetApiKeyBtn
+        className="tb-pressable h-11 shrink-0 rounded-full px-6 text-base font-semibold"
         disabled={status === "LOADING"}
         userEmail={sessionData?.user?.email || null}
         onClick={() => {
           handleResetApiKey();
         }}
       >
-        {sessionData?.user?.apiKey ? "Reset" : "Get"}
+        {sessionData?.user?.apiKey ? "Reset key" : "Get API key"}
       </ResetApiKeyBtn>
     </div>
   );

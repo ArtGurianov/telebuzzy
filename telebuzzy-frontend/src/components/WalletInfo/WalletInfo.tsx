@@ -8,7 +8,7 @@ export const WalletInfo = () => {
   const { isConnected } = useAccount();
 
   return (
-    <div className="flex w-full px-2 py-3 flex-col gap-4 justify-center items-center bg-foreground/10">
+    <div className="flex w-full flex-col items-center justify-center gap-4 rounded-tb-card bg-tb-surface-sky px-4 py-4">
       {!isConnected ? <WalletInfoNotConnected /> : <WalletInfoConnected />}
     </div>
   );

@@ -17,6 +17,8 @@ import { WalletInfo } from "../WalletInfo/WalletInfo";
 import { feesTokenDetailsSchema } from "@/lib/schemas/feesTokenDetailsSchema";
 import { MyDaogsPromo } from "../MyDaogsPromo/MyDaogsPromo";
 import { useRouter } from "next/navigation";
+import { getAppChain } from "@/lib/utils/getAppChain";
+import { bsc } from "viem/chains";
 
 const ENV_CONFIG = getClientConfig();
 
@@ -89,6 +91,18 @@ export const BillingDialog = () => {
     isPendingAnnualPrice ||
     isLoadingAllowance;
 
+  const annualSavingsPct =
+    typeof monthlyPrice === "bigint" &&
+    typeof annualPrice === "bigint" &&
+    monthlyPrice > BigInt(0)
+      ? Math.round(
+          (1 - Number(annualPrice) / (Number(monthlyPrice) * 12)) * 100
+        )
+      : null;
+
+  const chain = getAppChain();
+  const isTestNetwork = chain.id !== bsc.id;
+
   const isError =
     isErrorFeesContractDetails ||
     isErrorBalance ||
@@ -103,21 +117,35 @@ export const BillingDialog = () => {
         router.push("/");
       }}
     >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-center text-2xl font-mono">
-            {"telebuzzy.xyz PRO PLAN"}
+      <DialogContent className="h-auto max-h-[calc(100%-2rem)] gap-5 overflow-y-auto rounded-tb-feature bg-tb-surface-base sm:max-w-2xl">
+        <DialogHeader className="items-center gap-2 text-center sm:text-center">
+          <DialogTitle className="font-display text-3xl font-semibold">
+            {"Telebuzzy PRO"}
           </DialogTitle>
-          <DialogDescription className="text-center font-sans font-medium text-md text-primary underline underline-offset-4">
-            {"Jump from 100 to 5000 telegram notifications per month!"}
+          <DialogDescription className="text-center text-base text-pretty text-tb-ink-secondary">
+            {`Go from ${ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_LITE.toLocaleString("en-US")} to ${ENV_CONFIG.NEXT_PUBLIC_MESSAGES_LIMIT_PRO.toLocaleString("en-US")} notifications every 30 days. Pay with a stablecoin from your wallet on ${chain.name}.`}
           </DialogDescription>
+          {isTestNetwork ? (
+            <p className="rounded-full bg-tb-status-warning-bg px-3 py-1 text-sm font-medium text-tb-warning">
+              {`Test network — ${chain.name} test tokens only, no real funds`}
+            </p>
+          ) : null}
         </DialogHeader>
         {isError ? (
-          <p>{"An error occured while getting data from the blockchain"}</p>
+          <p
+            role="alert"
+            className="rounded-tb-control bg-tb-status-critical-bg px-4 py-2 text-center text-tb-danger"
+          >
+            {"Couldn’t load data from the blockchain. Please try again later."}
+          </p>
         ) : null}
-        {isLoading ? <p>{"Loading data from the blockchain"}</p> : null}
+        {isLoading ? (
+          <p aria-live="polite" className="text-center text-tb-ink-secondary">
+            {"Loading data from the blockchain…"}
+          </p>
+        ) : null}
         <WalletInfo />
-        <div className="w-full flex gap-8 justify-center items-center flex-wrap md:flex-nowrap">
+        <div className="grid w-full gap-4 sm:grid-cols-2">
           <ButtonsBlock
             usdContractAddress={
               validationResult.data?.tokenAddress as `0x${string}` | undefined
@@ -183,6 +211,11 @@ export const BillingDialog = () => {
                 : undefined
             }
             billingPlan={BILLING_PLANS_SOLIDITY_KEYS.ANNUAL}
+            badge={
+              annualSavingsPct && annualSavingsPct > 0
+                ? `Save ${annualSavingsPct}%`
+                : null
+            }
             onRefetchAllowance={() => {
               refetchAllowance();
             }}

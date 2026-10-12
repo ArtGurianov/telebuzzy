@@ -1,66 +1,62 @@
 # Telebuzzy v1 theme integration
 
-**Status:** Foundation only / opt-in (no runtime activation)
+**Status:** Active on every route
 **Visual contract:** [Design Contract v1.0](design-contract-v1.md)
 
-## Scope and rollout
+## Token layer
 
-- The new `--tb-*` variables are defined on `:root` and exposed through Tailwind v4 `@theme inline` as `tb-*` utilities, for example `bg-tb-brand-yellow`, `text-tb-ink-primary` and `rounded-tb-card`
-- The shared semantic aliases (`--background`, `--primary`, `--ring`, `--main`, `--success`, and the other `@mydaogs/ui` tokens) switch only inside `.tb-theme`
-- Do **not** add `.tb-theme` to the global layout yet: the existing body still has a repeated `/bg-image.png` background, a 720 px main container and legacy pages that have not been visually regression-tested
-- When redesigning a route, choose an explicit `tb-theme` root scope; when promoting it to the body, remove the old image/background treatment in the same reviewed UI change
-- Tailwind aliases and `--tb-*` names are stable v1 foundations; do not scatter arbitrary brand HEX values through JSX
-- Design contract is still **Proposal**, not approval to release or change pricing, authorization, or API behavior
+- `telebuzzy-frontend/src/app/globals.css` defines the `--tb-*` brand tokens on an unlayered `:root` and maps the shared semantic aliases (`--background`, `--primary`, `--ring`, `--main`, `--success` and the other `@mydaogs/ui` tokens) onto them, so the kit and Tailwind read the brand palette everywhere
+- Tailwind v4 `@theme inline` exposes them as `tb-*` utilities, for example `bg-tb-brand-yellow`, `text-tb-ink-primary`, `rounded-tb-card`, `shadow-tb-card`, `ease-tb-out` and `font-display` (Fredoka)
+- Do not scatter brand HEX values through JSX; add a token instead
+- Fonts are loaded with `next/font` in `src/app/layout.tsx`: Geist Sans (UI/body), Geist Mono (code), Fredoka 600/700 (display headings, `font-display`)
 
 ## Palette and semantic usage
 
 | Role | Token | Notes |
 | --- | --- | --- |
-| Main action | `--tb-brand-blue-strong` | White text, contrast ~5.33:1 |
+| Main action | `--tb-brand-blue-strong` | White text, contrast ~5.33:1 (`.tb-cta-blue`) |
+| Kit button fill | `--main` = `--tb-brand-yellow` | Ink text, contrast ~10.76:1 |
 | Decorative blue | `--tb-brand-blue-bright` | Not for small white-background text |
-| Decorative pink | `--tb-brand-pink` | Not for small white-background text |
-| Highlight | `--tb-brand-yellow` | Pair with `--tb-ink-primary` |
+| Decorative pink | `--tb-brand-pink` | Rings and dots only, not for small text |
 | Primary text | `--tb-ink-primary` | Contrast ~15.13:1 on white |
 | Secondary text | `--tb-ink-secondary` | Contrast ~5.82:1 on white |
 | Decorative border | `--tb-border-default` | Not sufficient alone for a critical control boundary |
-| Strong control border | `--tb-border-strong` | ~4.08:1 on white; ≥3.69:1 on the four approved light surfaces |
+| Strong control border | `--tb-border-strong` | ~4.08:1 on white; ≥3.69:1 on the four light surfaces |
 | Severity info | `--tb-status-info-bg` / `--tb-status-info-dot` | Background and indicator for informational events |
 | Severity warning | `--tb-status-warning-bg` / `--tb-status-warning-dot` | Background and indicator for warnings |
 | Severity critical | `--tb-status-critical-bg` / `--tb-status-critical-dot` | Background and indicator for critical events |
 | Feedback | `--tb-semantic-success`, `--tb-semantic-warning`, `--tb-semantic-danger` | Use text/icon with color, never color alone |
 
-The `--tb-surface-muted` and `--tb-border-strong` implementation helpers extend the contract palette for UI ergonomics; they do not alter any master asset
+`--tb-surface-muted` and `--tb-border-strong` extend the contract palette for UI ergonomics
 
-## Button and keyboard-focus compatibility (required before activation)
+## Buttons and focus
 
-- `@mydaogs/ui@0.9.2` uses `text-main-foreground` for every Button variant, including pale/transparent ones; setting `--main-foreground` to ink globally would make the blue primary unreadable (2.84:1)
-- For all **new scoped-theme** buttons, import `TelebuzzyButton` from `@/components/Buttons/TelebuzzyButton` rather than importing a raw kit `Button`
-- The adapter adds `tb-button-ink` to `secondary`, `outline`, `flat`, `ghost` and `link` variants; inside `.tb-theme` CSS gives them readable ink even on hover while the primary retains white on blue
-- This is not an upstream kit fix: existing kit buttons, kit-owned secondary controls and direct `Button` usages will still need inspection/migration during phase 2; **do not activate `.tb-theme` on routes until every button has been audited**
-- The scoped solid 2 px outer focus outline uses `--tb-brand-blue-strong` (≥4.82:1 against white, cream, sky and muted backgrounds), rather than relying on the kit's 50%-alpha ring; high-contrast forced-colors mode uses `Highlight`
-- `--border-radius` is set alongside `--radius` inside `.tb-theme` because the kit reads control rounding from the former
+- `@mydaogs/ui@0.9.2` renders every Button variant, including kit-internal ghost buttons such as `CopyToClipboardBtn`, with `text-main-foreground`. `--main-foreground` is therefore ink, which is readable on white, cream, sky and on the yellow `--main` fill of the `default` variant
+- Never use `variant="primary"`: ink on `--primary` blue is ~2.84:1
+- App CTAs are links or `variant="unset"` buttons with the component classes from `globals.css`: `.tb-cta-blue` (primary), `.tb-cta-white` (secondary), `.tb-cta-yellow` (playful), plus `.tb-pressable` for the `scale(0.97)` press feedback
+- `--border-radius` is set alongside `--radius` because the kit reads control rounding from the former
+- Focus is a solid 2 px `--tb-brand-blue-strong` outline with 3 px offset (≥4.82:1 on white, cream, sky and muted), replacing the kit's 50%-alpha ring; forced-colors mode uses `Highlight`
 
-## UI kit and typography integration
+## Backdrop and surfaces
 
-- Keep the existing `@mydaogs/ui` shadow contract (`--shadow` and the zero-offset shadow controls) unchanged
-- The current UI kit uses `--accent-foreground` as a ghost/outline hover background; the scoped theme intentionally supplies a pale sky value, not dark text. Recheck this mapping against the installed kit before activating the theme
-- `--color-background`, `--color-primary`, and existing Tailwind semantic mappings continue to read their inherited CSS variables and follow `.tb-theme` when it is applied
-- `Fredoka` for display headings is a future `next/font` layout-level change and is **not** loaded by this CSS-only foundation PR
-- Required brand PNGs are described with SHA-256 in the design contract but **are not added** to the repository in this foundation PR
+- `src/components/Backdrop/Backdrop.tsx` is a fixed, `aria-hidden`, pointer-transparent layer mounted once in the root layout:
+  - `public/tt-bg.webp` fills the viewport top to bottom with `object-cover object-center`, so narrow screens show its middle vertical slice
+  - `public/tt-logo.webp` floats near the top and bobs slowly
+  - `public/tt-head.webp` peeks up from below the bottom edge, rising and sinking while tipping side to side
+- Geometry is shared through `--tb-logo-top`, `--tb-logo-width`, `--tb-logo-height` and `--tb-head-width`; the hero spacer uses them to keep the logo uncovered on first paint and the footer margin uses them to reveal the head at the end of the page
+- All readable content sits on `.tb-card` (near-opaque cream) or white surfaces; no text is placed directly on the landscape
+- The delivered assets are the supplied WebP exports; the PNG masters with the SHA-256 values in the design contract are not stored in the repository
 
-## Activation gate
+## Motion
 
-Before applying `.tb-theme` to live routes, confirm:
+- Backdrop loops are CSS keyframes (off the main thread): an outer wrapper plays a one-off entrance, an inner wrapper loops, so the two transforms never conflict. Loops use a sine-like `--tb-ease-bob`; entrances use `--tb-ease-out`
+- Hero content rises in once with a short stagger (`.tb-rise`, `--tb-delay`)
+- `prefers-reduced-motion: reduce` removes the loops and movement, keeping opacity fades only
+- Hover effects are gated behind `(hover: hover) and (pointer: fine)`
 
-1. Replace/audit all raw kit Button usages in the activated scope, including hover for secondary / outline / flat / ghost / link; verify all variants in the actual installed kit
-2. Screenshot review at 320 / 375 / 768 / 1024 / 1440 / 1920 px and 200% zoom
-3. Contrast and keyboard focus of dialogs, secrets, billing and code blocks
-4. Existing auth, API key, Telegram and wallet flows remain unchanged
-5. Correct asset placement and the rights/pricing/testnet caveats from the design contract are addressed
+## Review checklist
 
-## Validation for this documentation/CSS PR
-
-- The design contract remains a proposal; master PNGs are not committed here, and the recorded SHA-256 values were validated against the *specific* supplied originals `tt-bg(3).png`, `tt-head.png` and `tt-logo(4).png` (other exports are not guaranteed identical)
-- Static checks: theme aliases point to declared tokens, CSS block delimiters balance, legacy semantic declarations remain unmodified; RGB contrast has been evaluated on the four approved light backgrounds
-- No route receives `.tb-theme` in this PR, so no intentional visual change to the existing site
-- An actual kit button-variant screenshot/regression run and a full frontend build remain outstanding; frontend installs require valid environment variables and register a Telegram webhook during postinstall
+1. Screenshot review at 320 / 375 / 768 / 1024 / 1440 / 1920 px and 200% zoom
+2. Contrast and keyboard focus of dialogs, secrets, billing and code blocks
+3. Auth, API key, Telegram and wallet flows behave as specified in the product code
+4. Rights/pricing/testnet caveats from the design contract are addressed before a commercial release

@@ -11,4 +11,4 @@ The kit ships no copy of this folder — it is project-specific by nature
 ## Product docs list (file name + one sentence short description)
 
 - [`design-contract-v1.md`](design-contract-v1.md) — proposed brand identity and website redesign contract covering assets, product UX, accessibility and acceptance gates
-- [`theme-integration.md`](theme-integration.md) — opt-in Tailwind/@mydaogs UI token integration and safe rollout checklist
+- [`theme-integration.md`](theme-integration.md) — active Tailwind/@mydaogs UI token layer, button and focus rules, backdrop and motion implementation

@@ -1,28 +1,19 @@
 "use client";
 
-import Image from "next/image";
 import { Button } from "@mydaogs/ui";
-import { LogoutSvgUrl } from "@/components/svg";
+import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 export const LogoutBtn = () => {
   return (
     <Button
       onClick={() => signOut()}
-      variant="link"
+      variant="unset"
       size="reset"
-      className="flex gap-1 text-lg font-light font-mono"
+      className="tb-pressable tb-cta-white h-10 gap-2 rounded-full px-4 text-sm font-semibold"
     >
-      <Image
-        src={LogoutSvgUrl}
-        className="w-6"
-        alt="logout"
-        width="0"
-        height="0"
-        sizes="100vh"
-        priority
-      />
-      {"logout"}
+      <LogOut aria-hidden className="size-4" />
+      {"Log out"}
     </Button>
   );
 };

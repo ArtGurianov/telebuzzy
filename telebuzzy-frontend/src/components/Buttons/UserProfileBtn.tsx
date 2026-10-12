@@ -11,6 +11,7 @@ import { getClientConfig } from "@/config/env";
 import { cn } from "@/lib/utils";
 import { GetComponentProps } from "@/lib/types";
 import Link from "next/link";
+import { BILLING_PLANS } from "@/lib/utils/contsants";
 
 const DISPLAY_USER_KEYS = {
   EMAIL: "EMAIL",
@@ -85,71 +86,73 @@ const UserProfileBtnCore = ({
     displayBillingPlan === "PRO"
       ? getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_PRO
       : getClientConfig().NEXT_PUBLIC_MESSAGES_LIMIT_LITE;
+  const isLimitReached = billingPeriodMessagesSent >= messagesLimit;
+
   const displayData: Record<DisplayUserKey, { label: string; value: string }> =
     {
-      [DISPLAY_USER_KEYS.EMAIL]: { label: "email:", value: email! },
+      [DISPLAY_USER_KEYS.EMAIL]: { label: "Email", value: email! },
       [DISPLAY_USER_KEYS.TG_ID]: {
-        label: "telegram id:",
-        value: tgUserId ? tgUserId.toString() : "not set! (read step 2)",
+        label: "Telegram ID",
+        value: tgUserId ? tgUserId.toString() : "Not connected (see step 2)",
       },
       [DISPLAY_USER_KEYS.MESSAGES_SENT]: {
-        label: "messages (current billing period):",
-        value: `${billingPeriodMessagesSent.toString()}/${messagesLimit}`,
+        label: "Sent this period",
+        value: `${billingPeriodMessagesSent.toString()} / ${messagesLimit}`,
       },
       [DISPLAY_USER_KEYS.BILLING_PLAN]: {
-        label: "current plan:",
-        value: displayBillingPlan,
+        label: "Plan",
+        value:
+          displayBillingPlan === BILLING_PLANS.LIGHT
+            ? "LITE"
+            : displayBillingPlan,
       },
       [DISPLAY_USER_KEYS.SUBSCRIPTION_TILL]: {
-        label: "subscriptionTill:",
+        label: "PRO until",
         value: displaySubscriptionTill,
       },
     };
 
   return (
     <PopoverDrawer
-      title="User profile"
-      className="pb-1"
+      title="Your account"
+      className="sm:w-96"
       content={
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-1 px-4 py-3 bg-background/60 rounded-sm">
+        <div className="flex flex-col gap-4">
+          <dl className="flex flex-col divide-y divide-tb-border-default rounded-tb-control border border-tb-border-default bg-tb-surface-white">
             {DISPLAY_DATA_ORDER.map((each) => (
-              <p className="flex gap-2 justify-between items-center" key={each}>
-                <span className="font-sans font-medium text-primary">
+              <div
+                className="flex items-center justify-between gap-4 px-4 py-2.5"
+                key={each}
+              >
+                <dt className="shrink-0 text-sm text-tb-ink-secondary">
                   {displayData[each].label}
-                </span>
-                <span
-                  className={cn(
-                    "px-2 bg-foreground/10 rounded-full text-sm font-mono border border-primary",
-                    {
-                      "bg-destructive/60":
-                        each === DISPLAY_USER_KEYS.MESSAGES_SENT &&
-                        billingPeriodMessagesSent >= messagesLimit,
-                      "pr-0": each === "BILLING_PLAN",
-                    }
-                  )}
+                </dt>
+                <dd
+                  className={cn("min-w-0 truncate text-right font-medium", {
+                    "font-mono text-sm": each !== DISPLAY_USER_KEYS.EMAIL,
+                    "text-tb-danger":
+                      each === DISPLAY_USER_KEYS.MESSAGES_SENT &&
+                      isLimitReached,
+                    "text-tb-warning":
+                      each === DISPLAY_USER_KEYS.TG_ID && !tgUserId,
+                  })}
                 >
-                  {each === "BILLING_PLAN" ? (
-                    <span className="flex gap-1">
-                      {displayData[each].value}
-                      <Button
-                        className="px-2 font-serif rounded-l-none rounded-r-full"
-                        size="reset"
-                      >
-                        <Link href="/billing">
-                          {displayBillingPlan === "PRO" ? "EXTEND" : "UPGRADE"}
-                        </Link>
-                      </Button>
-                    </span>
-                  ) : (
-                    displayData[each].value
-                  )}
-                </span>
-              </p>
+                  {displayData[each].value}
+                </dd>
+              </div>
             ))}
-          </div>
-          <div className="flex w-full items-center justify-end">
+          </dl>
+          <div className="flex items-center justify-between gap-2">
             <LogoutBtn />
+            <Link
+              href="/billing"
+              scroll={false}
+              className="tb-pressable tb-cta-blue inline-flex h-10 items-center rounded-full px-5 text-sm font-semibold"
+            >
+              {displayBillingPlan === BILLING_PLANS.PRO
+                ? "Extend PRO"
+                : "Upgrade to PRO"}
+            </Link>
           </div>
         </div>
       }

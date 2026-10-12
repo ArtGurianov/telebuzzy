@@ -9,24 +9,23 @@ export const WalletInfoNotConnected = () => {
 
   return (
     <div className="flex flex-wrap gap-4 justify-center items-center">
-      <span className="font-mono text-lg text-primary">
-        {"Wallet not connected"}
-      </span>
+      <span className="font-medium">{"Wallet not connected"}</span>
       <ConnectWalletBtn
         isConnecting={isConnecting}
         onChangeIsConnecting={() => setIsConnecting(true)}
       />
-      <div className="px-4 py-px bg-primary/10 border-l-3 border-b-2 border-primary/80 font-light font-serif w-full text-center text-primary">
-        {"Can't connect? "}
+      <p className="w-full text-center text-sm text-tb-ink-secondary">
+        {"Can’t connect? "}
         <Link
-          className="underline font-medium text-lg font-serif"
+          className="font-medium text-tb-brand-blue-strong underline underline-offset-4"
           href={`https://metamask.io/download`}
           rel="noopener noreferrer"
           target="_blank"
         >
-          {"GET METAMASK"}
+          {"Get MetaMask"}
+          <span className="sr-only">{" (opens in a new tab)"}</span>
         </Link>
-      </div>
+      </p>
     </div>
   );
 };

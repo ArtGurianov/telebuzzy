@@ -1,20 +1,20 @@
-"use client";
-
 import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <div className="w-full h-8 px-4 bg-foreground/80 flex gap-2 justify-center items-center text-accent/80 text-center text-wrap font-mono text-xs">
-      <span>
-        {"Contact us: "}
-        <Link
-          className="underline text-accent"
-          href={"mailto:support@telebuzzy.xyz"}
-        >
-          {"support@telebuzzy.xyz"}
-        </Link>
-      </span>
-      <span>{`MyDAOgs Ecosystem ${new Date().getFullYear()}. Rights reserved.`}</span>
-    </div>
+    <footer className="mt-6 mb-[calc(var(--tb-head-width)*0.62)] w-full max-w-5xl px-4 md:mt-10 md:px-8">
+      <div className="tb-card flex flex-col items-center justify-between gap-2 px-6 py-4 text-center text-sm text-tb-ink-secondary sm:flex-row sm:text-left">
+        <p>
+          {"Questions? "}
+          <Link
+            className="font-medium text-tb-brand-blue-strong underline underline-offset-4"
+            href="mailto:support@telebuzzy.xyz"
+          >
+            {"support@telebuzzy.xyz"}
+          </Link>
+        </p>
+        <p>{`© ${new Date().getFullYear()} MyDAOgs Ecosystem. All rights reserved.`}</p>
+      </div>
+    </footer>
   );
 };
