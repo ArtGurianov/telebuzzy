@@ -11,9 +11,9 @@
 
 ## Recommended reading order
 
-1. [`product/design-contract-v1.md`](product/design-contract-v1.md)
-2. [`product/theme-integration.md`](product/theme-integration.md)
-3. [`product/README.md`](product/README.md)
+1. [`product/README.md`](product/README.md)
+2. [`product/design-contract-v1.md`](product/design-contract-v1.md) — Proposal
+3. [`product/theme-integration.md`](product/theme-integration.md)
 4. [`decisions/blockchain.md`](decisions/blockchain.md)
 5. [`decisions/solidity-upgradeability.md`](decisions/solidity-upgradeability.md)
 6. [`rules/README.md`](rules/README.md)
