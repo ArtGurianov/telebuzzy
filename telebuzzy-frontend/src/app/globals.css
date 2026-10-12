@@ -2,6 +2,26 @@
 @import "@mydaogs/ui/styles.css";
 
 @theme inline {
+  /* New brand utilities (e.g. bg-tb-brand-yellow, text-tb-ink-primary) */
+  --color-tb-brand-blue-bright: var(--tb-brand-blue-bright);
+  --color-tb-brand-blue-strong: var(--tb-brand-blue-strong);
+  --color-tb-brand-yellow: var(--tb-brand-yellow);
+  --color-tb-brand-pink: var(--tb-brand-pink);
+  --color-tb-brand-green: var(--tb-brand-green);
+  --color-tb-ink-primary: var(--tb-ink-primary);
+  --color-tb-ink-secondary: var(--tb-ink-secondary);
+  --color-tb-surface-base: var(--tb-surface-base);
+  --color-tb-surface-white: var(--tb-surface-white);
+  --color-tb-surface-sky: var(--tb-surface-sky);
+  --color-tb-surface-muted: var(--tb-surface-muted);
+  --color-tb-border-default: var(--tb-border-default);
+  --color-tb-border-strong: var(--tb-border-strong);
+  --color-tb-success: var(--tb-semantic-success);
+  --color-tb-warning: var(--tb-semantic-warning);
+  --color-tb-danger: var(--tb-semantic-danger);
+  --color-tb-pink-text: var(--tb-semantic-pink-text);
+  --radius-tb-control: var(--tb-radius-control);
+  --radius-tb-card: var(--tb-radius-card);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -29,6 +49,30 @@
 }
 
 :root {
+  /* Telebuzzy brand foundation v1 — reserved tokens, opt-in only.
+     See docs/product/design-contract-v1.md and theme-integration.md.
+     The current UI remains on its legacy theme until .tb-theme is applied. */
+  --tb-brand-blue-bright: #0b9af9;
+  --tb-brand-blue-strong: #0265e0;
+  --tb-brand-yellow: #fbd812;
+  --tb-brand-pink: #ef25a6;
+  --tb-brand-green: #9da719;
+
+  --tb-ink-primary: #18263f;
+  --tb-ink-secondary: #59667b;
+  --tb-surface-base: #fffdf4;
+  --tb-surface-white: #ffffff;
+  --tb-surface-sky: #eaf6ff;
+  --tb-surface-muted: #f0f4f8;
+  --tb-border-default: #ced9e4;
+  --tb-border-strong: #8594a8;
+
+  --tb-semantic-success: #15613c;
+  --tb-semantic-warning: #73510f;
+  --tb-semantic-danger: #b42318;
+  --tb-semantic-pink-text: #8c1765;
+  --tb-radius-control: 0.75rem;
+  --tb-radius-card: 1.5rem;
   --radius: 0.625rem;
   --background: hsl(176, 40%, 39%);
   --foreground: hsl(216, 96%, 10%);
@@ -77,6 +121,42 @@
      derivation with a hard offset that also makes the press effect
      non-no-op). Nowhere near motherhunt's 4px neobrutalist restoration. */
   --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+/* New UI theme. Add tb-theme to the root container only when its pages
+   have been redesigned and reviewed. Existing styles stay unchanged until then.
+   @mydaogs/ui currently uses --accent-foreground for ghost/outline hover BG. */
+.tb-theme {
+  --radius: var(--tb-radius-control);
+  --background: var(--tb-surface-base);
+  --foreground: var(--tb-ink-primary);
+  --card: var(--tb-surface-white);
+  --card-foreground: var(--tb-ink-primary);
+  --popover: var(--tb-surface-white);
+  --popover-foreground: var(--tb-ink-primary);
+  --primary: var(--tb-brand-blue-strong);
+  --primary-foreground: var(--tb-surface-white);
+  --secondary: var(--tb-surface-sky);
+  --secondary-foreground: var(--tb-ink-primary);
+  --muted: var(--tb-surface-muted);
+  --muted-foreground: var(--tb-ink-secondary);
+  --accent: var(--tb-surface-sky);
+  --accent-foreground: var(--tb-surface-sky);
+  --destructive: var(--tb-semantic-danger);
+  --destructive-foreground: var(--tb-surface-white);
+  --border: var(--tb-border-default);
+  --input: var(--tb-border-strong);
+  --ring: var(--tb-brand-blue-strong);
+
+  --main: var(--primary);
+  --main-foreground: var(--primary-foreground);
+  --overlay: var(--tb-ink-primary);
+  --danger: var(--tb-semantic-danger);
+  --success: var(--tb-semantic-success);
+  --error: var(--tb-semantic-danger);
+  --info: var(--tb-brand-blue-strong);
+  --warn: var(--tb-semantic-warning);
+  --system: var(--tb-ink-secondary);
 }
 
 @layer base {
