@@ -23,10 +23,22 @@
 | Primary text | `--tb-ink-primary` | Contrast ~15.13:1 on white |
 | Secondary text | `--tb-ink-secondary` | Contrast ~5.82:1 on white |
 | Decorative border | `--tb-border-default` | Not sufficient alone for a critical control boundary |
-| Strong control border | `--tb-border-strong` | ~3.09:1 on white |
+| Strong control border | `--tb-border-strong` | ~4.08:1 on white; ≥3.69:1 on the four approved light surfaces |
+| Severity info | `--tb-status-info-bg` / `--tb-status-info-dot` | Background and indicator for informational events |
+| Severity warning | `--tb-status-warning-bg` / `--tb-status-warning-dot` | Background and indicator for warnings |
+| Severity critical | `--tb-status-critical-bg` / `--tb-status-critical-dot` | Background and indicator for critical events |
 | Feedback | `--tb-semantic-success`, `--tb-semantic-warning`, `--tb-semantic-danger` | Use text/icon with color, never color alone |
 
 The `--tb-surface-muted` and `--tb-border-strong` implementation helpers extend the contract palette for UI ergonomics; they do not alter any master asset
+
+## Button and keyboard-focus compatibility (required before activation)
+
+- `@mydaogs/ui@0.9.2` uses `text-main-foreground` for every Button variant, including pale/transparent ones; setting `--main-foreground` to ink globally would make the blue primary unreadable (2.84:1)
+- For all **new scoped-theme** buttons, import `TelebuzzyButton` from `@/components/Buttons/TelebuzzyButton` rather than importing a raw kit `Button`
+- The adapter adds `tb-button-ink` to `secondary`, `outline`, `flat`, `ghost` and `link` variants; inside `.tb-theme` CSS gives them readable ink even on hover while the primary retains white on blue
+- This is not an upstream kit fix: existing kit buttons, kit-owned secondary controls and direct `Button` usages will still need inspection/migration during phase 2; **do not activate `.tb-theme` on routes until every button has been audited**
+- The scoped solid 2 px outer focus outline uses `--tb-brand-blue-strong` (≥4.82:1 against white, cream, sky and muted backgrounds), rather than relying on the kit's 50%-alpha ring; high-contrast forced-colors mode uses `Highlight`
+- `--border-radius` is set alongside `--radius` inside `.tb-theme` because the kit reads control rounding from the former
 
 ## UI kit and typography integration
 
@@ -40,14 +52,15 @@ The `--tb-surface-muted` and `--tb-border-strong` implementation helpers extend 
 
 Before applying `.tb-theme` to live routes, confirm:
 
-1. Screenshot review at 320 / 375 / 768 / 1024 / 1440 / 1920 px and 200% zoom
-2. Contrast and keyboard focus of dialogs, secrets, billing and code blocks
-3. Existing auth, API key, Telegram and wallet flows remain unchanged
-4. Correct asset placement and the rights/pricing/testnet caveats from the design contract are addressed
+1. Replace/audit all raw kit Button usages in the activated scope, including hover for secondary / outline / flat / ghost / link; verify all variants in the actual installed kit
+2. Screenshot review at 320 / 375 / 768 / 1024 / 1440 / 1920 px and 200% zoom
+3. Contrast and keyboard focus of dialogs, secrets, billing and code blocks
+4. Existing auth, API key, Telegram and wallet flows remain unchanged
+5. Correct asset placement and the rights/pricing/testnet caveats from the design contract are addressed
 
 ## Validation for this documentation/CSS PR
 
-- The complete original design contract is committed as a proposal; source PNG bytes and their recorded hashes are unchanged
-- Static checks: theme aliases point to declared tokens, CSS block delimiters balance, legacy semantic declarations remain unmodified
+- The design contract remains a proposal; master PNGs are not committed here, and the recorded SHA-256 values were validated against the *specific* supplied originals `tt-bg(3).png`, `tt-head.png` and `tt-logo(4).png` (other exports are not guaranteed identical)
+- Static checks: theme aliases point to declared tokens, CSS block delimiters balance, legacy semantic declarations remain unmodified; RGB contrast has been evaluated on the four approved light backgrounds
 - No route receives `.tb-theme` in this PR, so no intentional visual change to the existing site
-- A full frontend build/visual regression check remains a follow-up; frontend installs require valid environment variables and register a Telegram webhook during postinstall
+- An actual kit button-variant screenshot/regression run and a full frontend build remain outstanding; frontend installs require valid environment variables and register a Telegram webhook during postinstall
