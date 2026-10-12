@@ -37,6 +37,7 @@
 - `telebuzzy-frontend/src/components/Buttons/DisconnectWalletBtn.tsx` - disconnects the connected wallet
 - `telebuzzy-frontend/src/components/Buttons/LogoutBtn.tsx` - signs the user out via next-auth
 - `telebuzzy-frontend/src/components/Buttons/ResetApiKeyBtn.tsx` - resets/generates the user's API key
+- `telebuzzy-frontend/src/components/Buttons/TelebuzzyButton.tsx` - opt-in adapter for readable dark text on light @mydaogs/ui Button variants inside .tb-theme
 - `telebuzzy-frontend/src/components/Buttons/SpendTransactionBtn.tsx` - calls `updateSubscription` on the contract, built on `useAppWriteContract`
 - `telebuzzy-frontend/src/components/Buttons/UserProfileBtn.tsx` - trigger button that opens the user profile `PopoverDrawer`
 - `telebuzzy-frontend/src/components/common/AnyFragment/AnyFragment.tsx` - generic `Fragment` wrapper that forwards a `key` prop, for mapping over components that require one
