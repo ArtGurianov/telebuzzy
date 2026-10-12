@@ -49,13 +49,14 @@
 - `telebuzzy-frontend/src/components/EmailTemplate/EmailTemplate.tsx` - renders the title/description for a given `EmailMessageType`, used by Resend emails
 - `telebuzzy-frontend/src/components/Footer/Footer.tsx` - site footer with contact link and ecosystem credit
 - `telebuzzy-frontend/src/components/GoodToKnow/GoodToKnow.tsx` - landing page facts about recipients, idempotency, severity and the critical reserve
+- `telebuzzy-frontend/src/components/Hero/GetApiKeyCta.tsx` - hero primary CTA: opens the magic-link dialog for guests, scrolls to step 1 for signed-in users
 - `telebuzzy-frontend/src/components/Hero/Hero.tsx` - landing hero: spacer under the floating logo, headline, subheading and the two CTAs
 - `telebuzzy-frontend/src/components/Instructions/ApiKey/ApiKeyControls.tsx` - displays and copies the user's API key, with reset control
 - `telebuzzy-frontend/src/components/Instructions/ApiKey/InstructionsApiKey.tsx` - step 1 of the onboarding list, wrapping `ApiKeyControls`
 - `telebuzzy-frontend/src/components/Instructions/Instructions.tsx` - the 3-step onboarding section (API key, Telegram bot, usage)
 - `telebuzzy-frontend/src/components/Instructions/Step.tsx` - numbered onboarding step card used by the three instruction steps
 - `telebuzzy-frontend/src/components/Instructions/TelegramBot/InstructionsTelegramBot.tsx` - step 2 instructions linking to the Telegram bot
-- `telebuzzy-frontend/src/components/Instructions/Usage/InstructionsUsage.tsx` - step 3 instructions with copyable `curl`/language code samples
+- `telebuzzy-frontend/src/components/Instructions/Usage/InstructionsUsage.tsx` - step 3 instructions with copyable `curl`/language code samples in a keyboard-navigable tabs widget
 - `telebuzzy-frontend/src/components/Login/LoginDialog.tsx` - email magic-link login form inside a `DialogDrawer`, opened via the `open-login-dialog` custom event
 - `telebuzzy-frontend/src/components/Login/withAuthBtn.tsx` - HOC that swaps an authenticated action button for one that fires `open-login-dialog` when signed out
 - `telebuzzy-frontend/src/components/MyDaogsPromo/MyDaogsPromo.tsx` - promo banner linking to the MyDAOgs ecosystem site
